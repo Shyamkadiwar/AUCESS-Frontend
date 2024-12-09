@@ -34,7 +34,7 @@ body {
   }
 
   .dark {
-    --background: 209 50% 5%;
+    --background: hsl(209 50% 5%);
     --foreground: 209 5% 90%;
     --card: 209 50% 0%;
     --card-foreground: 209 5% 90%;

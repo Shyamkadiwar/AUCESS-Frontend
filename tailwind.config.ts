@@ -71,7 +71,11 @@ export default {
         'martelsans-semiBold': ['var(--font-martelsans-semibold)', 'sans-serif'],
         'martelsans-bold': ['var(--font-martelsans-bold)', 'sans-serif'],
         'martelsans-extraBold': ['var(--font-martelsans-extrabold)', 'sans-serif'],
-        'martelsans-black': ['var(--font-martelsans-black)', 'sans-serif']
+        'martelsans-black': ['var(--font-martelsans-black)', 'sans-serif'],
+        'neue-ultraBold': ['var(--font-neue-ultrabold)', 'sans-serif'],
+        'neue-bold': ['var(--font-neue-bold)', 'sans-serif'],
+        'neue-medium': ['var(--font-neue-medium)', 'sans-serif'],
+        'neue-regular': ['var(--font-neue-regular)', 'sans-serif']
       },
       borderRadius: {
         lg: 'var(--radius)',

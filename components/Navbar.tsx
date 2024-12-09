@@ -31,29 +31,31 @@ const Navbar = () => {
     router.push('/signin')
   }
 
-  return <div className="w-full flex justify-center py-4 ">
+  return <div className="w-full flex justify-center sticky top-0 py-1 z-30">
     <nav className="w-full max-w-7xl flex flex-row items-center px-4 md:px-8">
       <div className="w-full flex flex-row items-center ">
-        <div className=" w-full flex flex-row items-center md:px-8 py-2">
+        <div className="w-full flex flex-row items-center py-2">
           <Image src={mainLogo} alt="logo" height={500} width={500} style={{ height: "60px", width: "50px" }} />
-          <h1 className="font-martelsans-bold text-2xl">AUCESS</h1>
+          <h1 className="font-neue-bold md:text-2xl">AUCESS</h1>
         </div>
-        <div className="w-full flex">
-          <ul className="w-full flex justify-between gap-4">
+        <div className="w-full hidden lg:flex">
+          <ul className="w-full flex justify-between gap-4 text-nowrap">
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="font-martelsans-semiBold relative transition-colors duration-200 ease-in-out hover:text-primary after:absolute after:left-0 after:bottom-0  after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-primary  after:transition-transform after:duration-300 hover:after:scale-x-100"
+                className="font-martelsans-bold relative transition-colors duration-200 ease-in-out hover:text-primary after:absolute after:left-0 after:bottom-0  after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-primary  after:transition-transform after:duration-300 hover:after:scale-x-100"
               >
                 {item.name}
               </Link>
             ))}
           </ul>
         </div>
-        <div className="flex gap-4 w-full justify-end">
-          <Button variant={"outline"} className="font-martelsans-semiold" onClick={handleSubmitClick}>Login</Button>
-          <Button className="font-martelsans-semiBold" onClick={handleRegisterclick}>Register</Button>
+        <div className="flex gap-1 md:gap-4 w-full justify-end">
+          <Button variant={"outline"} className="font-neue-bold hidden md:flex" onClick={handleSubmitClick}>Login</Button>
+          <Button size={"sm"} variant={"outline"} className="font-neue-bold md:hidden" onClick={handleSubmitClick}>Login</Button>
+          <Button className="font-neue-bold hidden md:flex" onClick={handleRegisterclick}>Register</Button>
+          <Button size={'sm'} className="font-neue-bold md:hidden" onClick={handleRegisterclick}>Register</Button>
           <ModeToggle />
         </div>
       </div>
