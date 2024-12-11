@@ -13,8 +13,8 @@ type NavItem = {
 };
 
 const navigationItems: NavItem[] = [
-  { name: "Quiz", href: "/quiz" },
-  { name: "Contests", href: "/contests" },
+  { name: "My Contest", href: "/quiz" },
+  { name: "Live Contests", href: "/contests" },
   { name: "About", href: "/about" },
   { name: "FAQs", href: "/faqs" },
   { name: "Contact Us", href: "/contact" }
@@ -39,7 +39,7 @@ const Navbar = () => {
           <h1 className="font-neue-bold md:text-2xl">AUCESS</h1>
         </div>
         <div className="w-full hidden lg:flex">
-          <ul className="w-full flex justify-between gap-4 text-nowrap">
+          <ul className="w-full flex justify-between gap-8 text-nowrap">
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
