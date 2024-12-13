@@ -43,7 +43,7 @@ const SigninComponent = () => {
           <div className="w-full flex-1 mt-8">
             <div className="flex flex-col items-center">
               <button
-                className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-azure-radiance-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+                className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-azure-radiance-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline" onClick={handleGoogleSignUp}>
                 <div className="bg-white p-2 rounded-full">
                   <svg className="w-4" viewBox="0 0 533.5 544.3">
                     <path
@@ -93,7 +93,7 @@ const SigninComponent = () => {
                 </span>
               </button>
               <h5>Don't have an account? <Link href={'/signup'} className="underline">Sign Up</Link></h5>
-              <p className="mt-6 text-xs text-gray-600 text-center">
+              <p className="mt-6 text-xs text-grahow to code your own trading viewy-600 text-center">
                 I agree to abide by Aucess's <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline" >Privacy Policy</Link>
               </p>
             </div>
