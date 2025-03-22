@@ -30,6 +30,13 @@ export default function Quiz() {
   const [selectedAnswers, setSelectedAnswers] = useState<{[key: number]: number}>({});
   const [timeLeft, setTimeLeft] = useState(30);
   
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < sampleQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+      setTimeLeft(30);
+    }
+  };
+  
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -42,20 +49,13 @@ export default function Quiz() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, handleNextQuestion]);
 
   const handleOptionSelect = (questionId: number, optionIndex: number) => {
     setSelectedAnswers(prev => ({
       ...prev,
       [questionId]: optionIndex
     }));
-  };
-
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < sampleQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setTimeLeft(30);
-    }
   };
 
   const getOptionClassName = (questionId: number, optionIndex: number) => {

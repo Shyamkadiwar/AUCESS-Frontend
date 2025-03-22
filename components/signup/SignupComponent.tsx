@@ -98,13 +98,13 @@ const SignUpComponet = () => {
                   <circle cx="8.5" cy="7" r="4" />
                   <path d="M20 8v6M23 11h-6" />
                 </svg>
-                <span className="ml-3">
+                <span className="ml-3" onClick={handleSubmitButton}>
                   Sign Up
                 </span>
               </button>
               <h5>Already have an account? <Link href={'/signin'} className="underline">Sign In</Link></h5>
               <p className="mt-6 text-xs text-gray-600 text-center">
-                I agree to abide by Aucess's <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline" >Privacy Policy</Link>
+                I agree to abide by Aucess&apos;s <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline" >Privacy Policy</Link>
               </p>
             </div>
           </div>

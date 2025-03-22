@@ -1,5 +1,6 @@
 import { Card } from './ui/card';
 import { Clock, Users, Award } from 'lucide-react';
+import Image from 'next/image';
 
 const quizzes = [
   {
@@ -25,7 +26,7 @@ export function QuizList() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {quizzes.map((quiz) => (
         <Card key={quiz.id} className="hover:shadow-lg transition-shadow">
-          <img
+          <Image
             src={quiz.image}
             alt={quiz.title}
             className="w-full h-40 object-cover rounded-lg mb-4"

@@ -23,11 +23,11 @@ const DashboardComponent = () => {
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
             </button>
             <div className="flex items-center gap-3">
-              <img
+              {/* <img
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40"
                 alt="Profile"
                 className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow-md"
-              />
+              /> */}
               <div className="hidden md:block">
                 <p className="font-medium text-gray-900">Sarah Wilson</p>
                 <p className="text-sm text-gray-500">Premium User</p>
@@ -59,15 +59,15 @@ const DashboardComponent = () => {
               {/* Placeholder for recent activity items */}
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <p>You completed "JavaScript Basics" quiz</p>
+                <p>You completed &quot;JavaScript Basics&quot; quiz</p>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <p>New quiz "React Fundamentals" created</p>
+                <p>New quiz &quot;React Fundamentals&quot; created</p>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                <p>Quiz "Python for Beginners" updated</p>
+                <p>Quiz &quot;Python for Beginners&quot; updated</p>
               </div>
             </div>
           </div>
