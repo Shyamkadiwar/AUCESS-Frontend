@@ -26,6 +26,7 @@ const SigninComponent = () => {
 
   const handleSubmitButton = () => {
     console.log("submitted");
+    console.log("testing the data : " + email , loading, password ) 
   }
 
   return <div className="min-h-screen dark:bg-neutral-800 bg-gray-100  text-gray-900 flex justify-center items-center px-4 ">
@@ -88,13 +89,13 @@ const SigninComponent = () => {
                   <circle cx="8.5" cy="7" r="4" />
                   <path d="M20 8v6M23 11h-6" />
                 </svg>
-                <span className="ml-3">
+                <span className="ml-3" onClick={handleSubmitButton}>
                   Sign In
                 </span>
               </button>
-              <h5>Don't have an account? <Link href={'/signup'} className="underline">Sign Up</Link></h5>
+              <h5>Don&apos;t have an account? <Link href={'/signup'} className="underline">Sign Up</Link></h5>
               <p className="mt-6 text-xs text-grahow to code your own trading viewy-600 text-center">
-                I agree to abide by Aucess's <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline" >Privacy Policy</Link>
+                I agree to abide by Aucess&apos;s <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline" >Privacy Policy</Link>
               </p>
             </div>
           </div>

@@ -24,7 +24,7 @@ const HowItWorks = () => {
   return <div className="flex flex-col w-full h-full justify-center items-center overflow-hidden my-20 py-12">
     <div className="flex flex-col h-full w-full max-w-7xl justify-center items-center">
       <div className="flex flex-col w-full justify-center items-center">
-        <h1 className="text-4xl font-neue-ultraBold text-center">Here's How It Works</h1>
+        <h1 className="text-4xl font-neue-ultraBold text-center">Here&apos;s How It Works</h1>
         <h3 className="text-neutral-400 text-lg font-neue-medium text-center">Follow these simple steps to get started with Aucess :</h3>
       </div>
       <div className="flex flex-col lg:flex-row h-full w-full gap-6 justify-center items-center my-12 md:px-8 px-4 lg:px-2 ">

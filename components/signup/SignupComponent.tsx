@@ -31,6 +31,13 @@ const SignUpComponet = () => {
 
   const handleSubmitButton = () => {
     console.log("submitted");
+    console.log("Testing the data" + email, username, password)
+  }
+
+  if (loading){
+    return <div className="flex flex-col w-full h-full bg-black text-white">
+      Loading...
+    </div>
   }
 
   return <div className="min-h-screen dark:bg-neutral-800 bg-gray-100  text-gray-900 flex justify-center items-center px-4 ">

@@ -1,5 +1,5 @@
 import { Card } from './ui/card';
-import { Clock, Users, Award, PlusCircle } from 'lucide-react';
+import { Clock, Users, Award } from 'lucide-react';
 
 const quizzes = [
   {
