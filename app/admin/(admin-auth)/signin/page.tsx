@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Input } from "../ui/input";
 import signinSVG from './Mobile login-cuate.svg'
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
 
 const SigninComponent = () => {
   const [email, setEmail] = useState<string>("");
@@ -49,7 +49,7 @@ const SigninComponent = () => {
       setLoading(true);
       setError(null);
       
-      const response = await axios.post('http://localhost:3000/api/v1/auth/login', {
+      const response = await axios.post('http://localhost:3000/api/v1/admin/login', {
         email,
         password,
       }, {
@@ -57,7 +57,7 @@ const SigninComponent = () => {
       });
 
       // On successful login, redirect to dashboard
-      router.push('/dashboard');
+      router.push('/admin/dashboard');
     } catch (err) {
       // Axios error handling
       if (axios.isAxiosError(err)) {
@@ -158,7 +158,7 @@ const SigninComponent = () => {
                     Sign In
                   </span>
                 </button>
-                <h5>Don&apos;t have an account? <Link href={'/signup'} className="underline">Sign Up</Link></h5>
+                <h5>Don&apos;t have an account? <Link href={'/admin/signup'} className="underline">Sign Up</Link></h5>
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   I agree to abide by Aucess&apos;s <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline">Privacy Policy</Link>
                 </p>

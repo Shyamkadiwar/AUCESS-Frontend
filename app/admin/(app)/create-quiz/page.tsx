@@ -1,0 +1,215 @@
+"use client"
+import { useState } from 'react';
+import * as XLSX from 'xlsx';
+import { Plus, Upload, FileSpreadsheet } from 'lucide-react';
+import { Sidebar } from '@/components/admin/sidebar';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import axios from 'axios';
+
+interface QuizQuestion {
+  text: string;
+  correctAnswer: string;
+  options: { text: string }[];
+}
+
+const CreateQuiz = () => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [fileName, setFileName] = useState('');
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const workbook = XLSX.read(event.target?.result, { type: 'binary' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      
+      // Convert Excel to JSON
+      const data = XLSX.utils.sheet_to_json(worksheet);
+      
+      // Transform data to match our quiz question structure
+      const parsedQuestions: QuizQuestion[] = data.map((row: any) => ({
+        text: row['Question Text'],
+        correctAnswer: row['Correct Answer'],
+        options: [
+          { text: row['Option 1'] },
+          { text: row['Option 2'] },
+          { text: row['Option 3'] },
+          { text: row['Option 4'] }
+        ]
+      }));
+
+      setQuestions(parsedQuestions);
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const handleCreateQuiz = async () => {
+    // Validate inputs
+    if (!title || !description || questions.length === 0) {
+      toast.error('Please fill in all required fields and upload questions');
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        'http://localhost:3000/api/v1/quiz/create-quiz', 
+        {
+          title,
+          description,
+          price: parseFloat(price) || 0,
+          questions
+        },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+  
+      if (response.data.success) {
+        toast.success('Quiz created successfully!');
+        setTitle('');
+        setDescription('');
+        setPrice('');
+        setQuestions([]);
+        setFileName('');
+      } else {
+        toast.error(response.data.message || 'Failed to create quiz');
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error creating quiz:', error.response?.data);
+        toast.error(
+          error.response?.data?.message || 
+          'An error occurred while creating the quiz'
+        );
+      } else {
+        console.error('Unexpected error:', error);
+        toast.error('An unexpected error occurred');
+      }
+    }
+  };
+  const downloadExcelTemplate = () => {
+    const worksheet = XLSX.utils.aoa_to_sheet([
+      ['Question Text', 'Correct Answer', 'Option 1', 'Option 2', 'Option 3', 'Option 4'],
+      ['Sample Question', 'Correct Option', 'Option A', 'Option B', 'Option C', 'Option D']
+    ]);
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Quiz Questions');
+
+    XLSX.writeFile(workbook, 'quiz_template.xlsx');
+  };
+
+  return (
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className='hidden md:flex'>
+        <Sidebar />
+      </div>
+      <main className="md:ml-64 p-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold text-gray-900">Create Quiz</h1>
+          </div>
+        </div>
+
+        <div className="bg-white text-black shadow-md rounded-lg p-6 space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="title">Quiz Title</Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter quiz title"
+                className="mt-2"
+              />
+            </div>
+            <div>
+              <Label htmlFor="price">Price (Optional)</Label>
+              <Input
+                id="price"
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Enter quiz price"
+                className="mt-2"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Input
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter quiz description"
+              className="mt-2"
+            />
+          </div>
+
+          <div className="space-y-4">
+            <Label>Upload Quiz Questions</Label>
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="outline" 
+                onClick={downloadExcelTemplate}
+                className="flex items-center gap-2"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                Download Template
+              </Button>
+              
+              <div className="relative">
+                <input 
+                  type="file" 
+                  accept=".xlsx, .xls"
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+                <Button variant="secondary" className="flex items-center gap-2">
+                  <Upload className="w-4 h-4" />
+                  {fileName ? `${fileName}` : 'Upload Excel'}
+                </Button>
+              </div>
+            </div>
+
+            {questions.length > 0 && (
+              <div className="mt-4">
+                <p className="text-sm text-gray-600">
+                  {questions.length} questions loaded
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end">
+            <Button 
+              onClick={handleCreateQuiz}
+              disabled={!title || !description || questions.length === 0}
+              className="flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Create Quiz
+            </Button>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default CreateQuiz;

@@ -1,19 +1,24 @@
 "use client"
 
 import Image from "next/image";
+import signUpSVG from './Sign up-cuate.svg'
 import Link from "next/link";
-import { Input } from "../ui/input";
-import signinSVG from './Mobile login-cuate.svg'
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
 
-const SigninComponent = () => {
+const SignUpComponent = () => {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  }
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -23,15 +28,17 @@ const SigninComponent = () => {
     setPassword(e.target.value);
   }
 
-  const handleGoogleSignIn = () => {
+  const handleGoogleSignUp = () => {
     setLoading(true);
     window.location.href = "http://localhost:3000/api/v1/auth/google/dashboard";
   }
 
   const validateInputs = () => {
+    if (!name.trim()) return "Name is required";
     if (!email.trim()) return "Email is required";
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email";
     if (!password.trim()) return "Password is required";
+    if (password.length < 6) return "Password must be at least 6 characters";
     return null;
   }
 
@@ -49,19 +56,18 @@ const SigninComponent = () => {
       setLoading(true);
       setError(null);
       
-      const response = await axios.post('http://localhost:3000/api/v1/auth/login', {
+      const response = await axios.post('http://localhost:3000/api/v1/admin/signup', {
+        name,
         email,
         password,
-      }, {
-        withCredentials: true
       });
 
-      // On successful login, redirect to dashboard
+      // Redirect on successful signup
       router.push('/dashboard');
     } catch (err) {
       // Axios error handling
       if (axios.isAxiosError(err)) {
-        const errorMessage = err.response?.data?.message || err.message || 'Invalid credentials';
+        const errorMessage = err.response?.data?.message || err.message || 'Failed to sign up';
         setError(errorMessage);
       } else {
         setError('An unexpected error occurred');
@@ -81,23 +87,18 @@ const SigninComponent = () => {
   }
 
   return (
-    <div className="min-h-screen dark:bg-neutral-800 bg-gray-100 text-gray-900 flex justify-center items-center px-4">
+    <div className="min-h-screen dark:bg-neutral-800 bg-gray-100 text-gray-900 flex justify-center items-center px-4 ">
       <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-2xl flex justify-center items-center flex-1 rounded-xl">
-        <div className="flex-1 text-center hidden lg:flex w-full justify-center items-center">
-          <div className="m-12 xl:m-16 w-full justify-center items-center bg-contain bg-center bg-no-repeat">
-            <Image src={signinSVG} alt="Sign In Illustration" />
-          </div>
-        </div>
-        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12 w-full justify-center items-center">
+        <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12 w-full justify-center items-center ">
           <div className="mt-12 flex flex-col items-center">
             <h1 className="text-2xl xl:text-3xl font-extrabold">
-              Sign In
+              Sign up
             </h1>
             <div className="w-full flex-1 mt-8">
               <div className="flex flex-col items-center">
                 <button
                   className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-azure-radiance-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline"
-                  onClick={handleGoogleSignIn}>
+                  onClick={handleGoogleSignUp}>
                   <div className="bg-white p-2 rounded-full">
                     <svg className="w-4" viewBox="0 0 533.5 544.3">
                       <path
@@ -115,7 +116,7 @@ const SigninComponent = () => {
                     </svg>
                   </div>
                   <span className="ml-4">
-                    Sign In with Google
+                    Sign Up with Google
                   </span>
                 </button>
               </div>
@@ -123,12 +124,12 @@ const SigninComponent = () => {
               <div className="my-12 border-b text-center">
                 <div
                   className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                  Or sign in with e-mail
+                  Or sign up with e-mail
                 </div>
               </div>
 
               {error && (
-                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-center mx-auto max-w-xs">
+                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
                   {error}
                 </div>
               )}
@@ -136,16 +137,25 @@ const SigninComponent = () => {
               <div className="mx-auto max-w-xs flex flex-col gap-4 w-full justify-center items-center">
                 <Input
                   className="w-full px-8 py-6 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={handleEmail} />
+                  type="text" 
+                  placeholder="Name" 
+                  value={name}
+                  onChange={handleName} 
+                />
                 <Input
                   className="w-full px-8 py-6 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="password"
-                  placeholder="Password"
+                  type="email" 
+                  placeholder="Email" 
+                  value={email}
+                  onChange={handleEmail}
+                />
+                <Input
+                  className="w-full px-8 py-6 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  type="password" 
+                  placeholder="Password" 
                   value={password}
-                  onChange={handlePassword} />
+                  onChange={handlePassword}
+                />
                 <button
                   className="mt-5 tracking-wide font-semibold bg-azure-radiance-950 text-gray-100 w-full py-4 rounded-lg hover:bg-azure-radiance-900 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                   onClick={handleSubmit}>
@@ -153,12 +163,13 @@ const SigninComponent = () => {
                     strokeLinecap="round" strokeLinejoin="round">
                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                     <circle cx="8.5" cy="7" r="4" />
+                    <path d="M20 8v6M23 11h-6" />
                   </svg>
                   <span className="ml-3">
-                    Sign In
+                    Sign Up
                   </span>
                 </button>
-                <h5>Don&apos;t have an account? <Link href={'/signup'} className="underline">Sign Up</Link></h5>
+                <h5>Already have an account? <Link href={'/admin/signin'} className="underline">Sign In</Link></h5>
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   I agree to abide by Aucess&apos;s <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline">Privacy Policy</Link>
                 </p>
@@ -166,9 +177,14 @@ const SigninComponent = () => {
             </div>
           </div>
         </div>
+        <div className="flex-1 text-center hidden lg:flex w-full justify-center items-center">
+          <div className="m-12 xl:m-16 w-full justify-center items-center bg-contain bg-center bg-no-repeat">
+            <Image src={signUpSVG} alt="Sign Up Illustration" />
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-export default SigninComponent;
+export default SignUpComponent;

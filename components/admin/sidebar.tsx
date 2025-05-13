@@ -1,7 +1,7 @@
 import Logo from '@/public/mainLogo.png'
 import Image from 'next/image';
-import { Home, BookOpen, Trophy, Settings, Users } from 'lucide-react';
-import { Link } from './ui/link';
+import { Home, BookOpen, Trophy, Settings, Users, Plus } from 'lucide-react';
+import { Link } from '../ui/link';
 
 export function Sidebar() {
   return (
@@ -16,17 +16,21 @@ export function Sidebar() {
           <Home className="w-5 h-5" />
           Dashboard
         </Link>
-        <Link href={'/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <BookOpen className="w-5 h-5" />
-          Quizzes
+        <Link href={'/admin/create-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+          <Plus className="w-5 h-5" />
+          Create Quiz
         </Link>
-        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+        <Link href={'/admin/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Trophy className="w-5 h-5" />
-          Leaderboard
+          Quizzes
         </Link>
         <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Users className="w-5 h-5" />
           Students
+        </Link>
+        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+          <Users className="w-5 h-5" />
+          Manage Sub-admins 
         </Link>
         <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Settings className="w-5 h-5" />
