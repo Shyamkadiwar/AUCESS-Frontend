@@ -153,7 +153,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
         console.log(answers);
         
         // Redirect to result page
-        router.push(`/quiz-result/${quizId}`);
+        router.push(`/user/quiz-result/${quizId}`);
       } else {
         setError(response.data.message);
       }

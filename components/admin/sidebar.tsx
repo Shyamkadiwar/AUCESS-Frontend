@@ -12,7 +12,7 @@ export function Sidebar() {
       </div>
       
       <nav className="space-y-2">
-        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+        <Link href={'/admin/dashboard'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Home className="w-5 h-5" />
           Dashboard
         </Link>
@@ -24,11 +24,11 @@ export function Sidebar() {
           <Trophy className="w-5 h-5" />
           Quizzes
         </Link>
-        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+        <Link href={'/admin/students'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Users className="w-5 h-5" />
           Students
         </Link>
-        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+        <Link href={'/admin/sub-admin'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Users className="w-5 h-5" />
           Manage Sub-admins 
         </Link>

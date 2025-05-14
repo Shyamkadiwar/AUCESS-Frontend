@@ -48,13 +48,13 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
             Created: {formatDate(quiz.createdAt)}
           </span>
           <div className="flex space-x-2">
-            <Link href={`/user/quiz/${quiz.id}`}>
+            <Link href={`/admin/quiz/${quiz.id}`}>
               <Button 
                 variant="outline" 
                 size="sm" 
                 className="text-xs"
               >
-                Take Quiz
+                View Details
               </Button>
             </Link>
           </div>

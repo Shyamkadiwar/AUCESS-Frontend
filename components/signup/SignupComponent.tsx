@@ -63,7 +63,7 @@ const SignUpComponent = () => {
       });
 
       // Redirect on successful signup
-      router.push('/dashboard');
+      router.push('/user/dashboard');
     } catch (err) {
       // Axios error handling
       if (axios.isAxiosError(err)) {

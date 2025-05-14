@@ -1,18 +1,25 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import { Plus, Upload, FileSpreadsheet } from 'lucide-react';
+import { Plus, Upload, FileSpreadsheet, ShieldAlert } from 'lucide-react';
 import { Sidebar } from '@/components/admin/sidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface QuizQuestion {
   text: string;
   correctAnswer: string;
   options: { text: string }[];
+}
+
+interface DashboardResponse {
+  user: {
+    role: string;
+  }
 }
 
 const CreateQuiz = () => {
@@ -21,6 +28,41 @@ const CreateQuiz = () => {
   const [price, setPrice] = useState('');
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [fileName, setFileName] = useState('');
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
+
+  // Check if user is authorized (admin only)
+  const checkAdminStatus = async () => {
+    try {
+      // Use the dashboard endpoint to check if user is authenticated and their role
+      const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
+        withCredentials: true
+      });
+      
+      if (response.data && response.data.user) {
+        // Set admin status based on user role
+        const isUserAdmin = response.data.user.role === 'ADMIN';
+        setIsAdmin(isUserAdmin);
+        
+        // If not admin, redirect to dashboard or another appropriate page
+        // if (!isUserAdmin) {
+        //   toast.error('Access denied. Only administrators can create quizzes.');
+        //   router.push('/admin/dashboard');
+        // }
+      }
+    } catch (err) {
+      console.error('Authentication error:', err);
+      toast.error('Authentication failed. Please login again.');
+      router.push('/login');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAdminStatus();
+  }, []);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -101,6 +143,7 @@ const CreateQuiz = () => {
       }
     }
   };
+
   const downloadExcelTemplate = () => {
     const worksheet = XLSX.utils.aoa_to_sheet([
       ['Question Text', 'Correct Answer', 'Option 1', 'Option 2', 'Option 3', 'Option 4'],
@@ -113,6 +156,36 @@ const CreateQuiz = () => {
     XLSX.writeFile(workbook, 'quiz_template.xlsx');
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="h-full min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // Access denied state (should redirect, but just in case)
+  if (!isAdmin) {
+    return (
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className='hidden md:flex'>
+          <Sidebar />
+        </div>
+        <main className="md:ml-64 p-8">
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+            <ShieldAlert className="w-16 h-16 text-red-500 mb-4" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
+            <p className="text-gray-600 mb-6">You don't have permission to access this page. Only administrators can manage sub-admins.</p>
+            <Button onClick={() => router.push('/admin/dashboard')}>
+              Return to Dashboard
+            </Button>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
       <div className='hidden md:flex'>
@@ -122,6 +195,7 @@ const CreateQuiz = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
             <h1 className="text-3xl font-bold text-gray-900">Create Quiz</h1>
+            <p className="text-gray-600">Create new quizzes for your students</p>
           </div>
         </div>
 

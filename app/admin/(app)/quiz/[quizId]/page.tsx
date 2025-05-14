@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Sidebar } from '@/components/sidebar';
-import { Calendar, Clock, Users, Award, FileText } from 'lucide-react';
+import { Calendar, Clock, Users, Award, FileText, Edit, Trash2, AlertCircle } from 'lucide-react';
 import { Link } from '@/components/ui/link';
+import { useRouter } from 'next/navigation';
 
 interface QuizOption {
   id: string;
@@ -61,6 +62,20 @@ interface Quiz {
   topScores: LeaderboardEntry[];
 }
 
+interface QuizAttempt {
+  id: string;
+  quizId: string;
+  userId: string;
+  score: number;
+  completed: boolean;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
 interface PageParams {
   quizId: string;
 }
@@ -69,33 +84,14 @@ const Quiz = ({ params }: { params: PageParams }) => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [joinError, setJoinError] = useState<string | null>(null);
-  const [joinQuiz, setJoiningQuiz] = useState<boolean>(false)
-  const [hasJoined, setHasJoined] = useState<boolean>(false)
-
-  // Extract quizId from URL if using app router
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const [quizUsers, setQuizUsers] = useState<QuizAttempt[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
+  const [showUsers, setShowUsers] = useState<boolean>(false);
+  
+  const router = useRouter();
   const quizId = params?.quizId;
-
-  const handleJoin = async () => {
-    setJoiningQuiz(true);
-    setJoinError(null);
-    
-    try {
-      const response = await axios.post(`http://localhost:3000/api/v1/quiz/${quizId}/join`, {
-        withCredentials: true
-      });
-      
-      if (response.data.success) {
-        setHasJoined(true);
-      } else {
-        setJoinError(response.data.message || 'Failed to join quiz');
-      }
-    } catch (err) {
-      // Error handling...
-    } finally {
-      setJoiningQuiz(false);
-    }
-  };
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -131,6 +127,68 @@ const Quiz = ({ params }: { params: PageParams }) => {
       fetchQuiz();
     }
   }, [quizId]);
+
+  const fetchQuizUsers = async () => {
+    try {
+      setLoadingUsers(true);
+      const response = await axios.get(`http://localhost:3000/api/v1/quiz/${quizId}/users`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+
+      if (response.status !== 200) {
+        throw new Error(response.data.message || 'Failed to fetch quiz users');
+      }
+
+      setQuizUsers(response.data.data);
+      setShowUsers(true);
+    } catch (err) {
+      console.error('Error fetching quiz users:', err);
+      alert(
+        axios.isAxiosError(err)
+          ? err.response?.data?.message || err.message
+          : err instanceof Error
+            ? err.message
+            : 'An unknown error occurred'
+      );
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  const handleDeleteQuiz = async () => {
+    try {
+      setIsDeleting(true);
+      const response = await axios.delete(`http://localhost:3000/api/v1/quiz/${quizId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+
+      if (response.status !== 200) {
+        throw new Error(response.data.message || 'Failed to delete quiz');
+      }
+
+      // Redirect to quizzes page after successful deletion
+      router.push('/admin/quizzes');
+      
+    } catch (err) {
+      console.error('Error deleting quiz:', err);
+      alert(
+        axios.isAxiosError(err)
+          ? err.response?.data?.message || err.message
+          : err instanceof Error
+            ? err.message
+            : 'An unknown error occurred'
+      );
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  };
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -219,8 +277,55 @@ const Quiz = ({ params }: { params: PageParams }) => {
             <h1 className="text-3xl font-bold text-gray-900">{quiz.title}</h1>
             <p className="text-gray-600">{quiz.description}</p>
           </div>
-
+          <div className="flex gap-2">
+            <Link 
+              href={`/dashboard/quizzes/edit/${quizId}`}
+              className="flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              <Edit className="h-4 w-4" />
+              Edit
+            </Link>
+            <button 
+              onClick={() => setShowDeleteConfirm(true)}
+              className="flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+              disabled={isDeleting}
+            >
+              <Trash2 className="h-4 w-4" />
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </button>
+          </div>
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+              <div className="flex items-center gap-3 mb-4 text-red-600">
+                <AlertCircle className="h-6 w-6" />
+                <h3 className="text-xl font-semibold">Delete Quiz</h3>
+              </div>
+              <p className="text-gray-700 mb-6">
+                Are you sure you want to delete "{quiz.title}"? This action cannot be undone and will remove all questions, attempts, and leaderboard entries associated with this quiz.
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-4 py-2 border text-black border-gray-300 rounded-md hover:bg-gray-50 transition"
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteQuiz}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete Quiz'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Quiz details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -287,6 +392,23 @@ const Quiz = ({ params }: { params: PageParams }) => {
                   {quiz.isPublic ? 'Public' : 'Private'}
                 </span>
               </div>
+              <button
+                onClick={fetchQuizUsers}
+                className="w-full mt-4 px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition flex items-center justify-center gap-2"
+                disabled={loadingUsers}
+              >
+                {loadingUsers ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    Loading Users...
+                  </>
+                ) : (
+                  <>
+                    <Users className="h-4 w-4" />
+                    View Participants
+                  </>
+                )}
+              </button>
             </div>
           </div>
 
@@ -309,8 +431,8 @@ const Quiz = ({ params }: { params: PageParams }) => {
                       <span className="font-medium">{entry.user.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-sm text-gray-600">{formatTime(entry.completionTime)}</span>
-                      <span className="font-bold text-blue-600">{entry.score}%</span>
+                      {/* <span className="text-sm text-gray-600">{formatTime(entry.completionTime)}</span> */}
+                      <span className="font-bold text-blue-600">Score : {entry.score}</span>
                     </div>
                   </div>
                 ))}
@@ -320,18 +442,75 @@ const Quiz = ({ params }: { params: PageParams }) => {
             )}
           </div>
         </div>
-        <div className="flex gap-2 w-ful justify-center items-center">
-          <button 
-          className="px-4 py-2 bg-black text-white rounded-md hover:bg-green-700 transition"
-          onClick={()=>(handleJoin())}>
-            Join Quiz
-          </button>
-          <Link href={`/start-quiz/${quizId}`}>
-            <button className="px-4 py-2 bg-black text-white rounded-md hover:bg-green-700 transition">
-              Start Quiz
-            </button>
-          </Link>
-        </div>
+
+        {/* Quiz Participants Table */}
+        {showUsers && (
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mt-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <Users className="h-6 w-6 text-blue-600" />
+                <h2 className="text-xl font-semibold text-gray-800">Quiz Participants</h2>
+              </div>
+              <button 
+                onClick={() => setShowUsers(false)}
+                className="text-sm text-gray-500 hover:text-gray-700"
+              >
+                Hide
+              </button>
+            </div>
+            
+            {quizUsers && quizUsers.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Score
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {quizUsers.map((attempt) => (
+                      <tr key={attempt.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="font-medium text-gray-900">{attempt.user.name}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-gray-500">{attempt.user.email}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="font-medium text-blue-600">{attempt.score}/{quiz.questions.length}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${attempt.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                            {attempt.completed ? 'Completed' : 'In Progress'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                          {formatDate(attempt.createdAt)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center py-8">No participants found for this quiz</p>
+            )}
+          </div>
+        )}
       </main>
     </div>
   );

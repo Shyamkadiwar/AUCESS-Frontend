@@ -12,11 +12,11 @@ export function Sidebar() {
       </div>
       
       <nav className="space-y-2">
-        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+        <Link href={'/user/dashboard'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Home className="w-5 h-5" />
           Dashboard
         </Link>
-        <Link href={'/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+        <Link href={'/user/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <BookOpen className="w-5 h-5" />
           Quizzes
         </Link>
