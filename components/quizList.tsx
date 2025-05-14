@@ -9,7 +9,7 @@ const quizzes = [
     participants: 245,
     duration: '45 min',
     difficulty: 'Intermediate',
-    image: 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?auto=format&fit=crop&q=80&w=300&h=200'
+    image: '',
   },
   {
     id: 2,
@@ -17,7 +17,8 @@ const quizzes = [
     participants: 189,
     duration: '30 min',
     difficulty: 'Beginner',
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=300&h=200'
+    // image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=300&h=200'
+    image: '',
   },
 ];
 
