@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import axios from 'axios';
 import Link from 'next/link';
-import { QuizCard } from '@/components/QuizCard';
+import { QuizCard } from '@/components/admin/QuizCard';
 
 // Define interface for Quiz
 export interface Quiz {
@@ -73,7 +73,7 @@ const Quizzes = () => {
           <div className="space-y-1">
             <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
           </div>
-          <Link href="/create-quiz">
+          <Link href="/admin/create-quiz">
             <Button className="flex items-center gap-2">
               <Plus className="w-4 h-4" />
               Create New Quiz

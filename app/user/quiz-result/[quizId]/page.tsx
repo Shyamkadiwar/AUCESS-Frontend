@@ -99,12 +99,12 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
 
   // Back to quiz list
   const handleBackToQuizzes = () => {
-    router.push('/quizzes');
+    router.push('/user/quizzes');
   };
 
   // View quiz details
   const handleViewQuizDetails = () => {
-    router.push(`/quiz/${quizId}`);
+    router.push(`/user/quiz/${quizId}`);
   };
 
   // Share quiz result
@@ -275,7 +275,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
             </h2>
             
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full text-black">
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="px-4 py-3 text-left text-gray-600">Rank</th>
@@ -311,7 +311,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
                         {entry.rank === result.rank && ' (You)'}
                       </td>
                       <td className="px-4 py-3 text-right font-bold">
-                        {entry.score}%
+                        {entry.score}
                       </td>
                     </tr>
                   ))}
