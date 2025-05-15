@@ -1,9 +1,9 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { Card } from './ui/card';
 import { Trophy, Clock, Users, DollarSign, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
-import { Link } from './ui/link';
+import { Card } from '../ui/card';
+import { Link } from '../ui/link';
 
 interface Quiz {
   id: string;
@@ -135,7 +135,7 @@ export function OngoingQuizzes(): JSX.Element {
       >
         {quizzes.length > 0 ? (
           quizzes.map((quiz) => (
-            <Card 
+            <Card
               key={quiz.id} 
               className="flex-shrink-0 w-80"
             >
@@ -165,7 +165,7 @@ export function OngoingQuizzes(): JSX.Element {
                       <Trophy className="w-4 h-4" />
                       ${quiz.price} Prize
                     </div>
-                    <Link href={`/user/quiz/${quiz.id}`}>
+                    <Link href={`/admin/quiz/${quiz.id}`}>
                     <button className="w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700 transition-colors flex items-center justify-center gap-1">
                       View
                     </button>

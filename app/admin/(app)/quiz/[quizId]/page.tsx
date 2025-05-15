@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Sidebar } from '@/components/sidebar';
+import { Sidebar } from '@/components/admin/sidebar';
 import { Calendar, Clock, Users, Award, FileText, Edit, Trash2, AlertCircle } from 'lucide-react';
 import { Link } from '@/components/ui/link';
 import { useRouter } from 'next/navigation';
@@ -50,10 +50,11 @@ interface Quiz {
   description: string;
   createdAt: string;
   updatedAt: string;
+  startDate: string;
+  endDate: string;
   userId: string;
   isPublic: boolean;
   timeLimit: number | null;
-  passingScore: number;
   questions: QuizQuestion[];
   totalParticipants: number;
   totalQuestions: number;
@@ -279,13 +280,13 @@ const Quiz = ({ params }: { params: PageParams }) => {
           </div>
           <div className="flex gap-2">
             <Link 
-              href={`/dashboard/quizzes/edit/${quizId}`}
+              href={`/admin/edit/${quizId}`}
               className="flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
             >
               <Edit className="h-4 w-4" />
               Edit
             </Link>
-            <button 
+            <button
               onClick={() => setShowDeleteConfirm(true)}
               className="flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
               disabled={isDeleting}
@@ -342,6 +343,24 @@ const Quiz = ({ params }: { params: PageParams }) => {
                   <p className="text-gray-800">{formatDate(quiz.createdAt)}</p>
                 </div>
               </div>
+              {quiz.startDate && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="text-sm text-gray-500">Start Date</p>
+                    <p className="text-gray-800">{formatDate(quiz.startDate)}</p>
+                  </div>
+                </div>
+              )}
+              {quiz.endDate && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="text-sm text-gray-500">End Date</p>
+                    <p className="text-gray-800">{formatDate(quiz.endDate)}</p>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-gray-500" />
                 <div>
@@ -354,13 +373,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
                 <div>
                   <p className="text-sm text-gray-500">Questions</p>
                   <p className="text-gray-800">{quiz.totalQuestions}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Award className="h-5 w-5 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-500">Passing Score</p>
-                  <p className="text-gray-800">{quiz.passingScore}%</p>
                 </div>
               </div>
             </div>
@@ -385,12 +397,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
                   <p className="text-sm text-black">Leaderboard Entries</p>
                   <p className="text-gray-800">{quiz.leaderboardEntries}</p>
                 </div>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 mb-1">Status</p>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${quiz.isPublic ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                  {quiz.isPublic ? 'Public' : 'Private'}
-                </span>
               </div>
               <button
                 onClick={fetchQuizUsers}
@@ -432,7 +438,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
                     </div>
                     <div className="flex items-center gap-3">
                       {/* <span className="text-sm text-gray-600">{formatTime(entry.completionTime)}</span> */}
-                      <span className="font-bold text-blue-600">Score : {entry.score}</span>
+                      <span className="font-bold text-blue-600">Score : {entry.score}/{quiz.questions.length}</span>
                     </div>
                   </div>
                 ))}

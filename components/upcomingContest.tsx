@@ -1,10 +1,9 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { Card } from './ui/card';
 import { Trophy, Clock, Users, DollarSign, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { Card } from './ui/card';
 import { Link } from './ui/link';
-
 interface Quiz {
   id: string;
   title: string;
@@ -18,7 +17,7 @@ interface Quiz {
   updatedAt: string;
 }
 
-export function OngoingQuizzes(): JSX.Element {
+export function UpcomingQuizzes(): JSX.Element {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,7 +28,7 @@ export function OngoingQuizzes(): JSX.Element {
     const fetchQuizzes = async (): Promise<void> => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/ongoing', {withCredentials:true});
+        const response = await axios.get('http://localhost:3000/api/v1/quiz/upcoming', {withCredentials:true});
         if (response.data.success) {
           setQuizzes(response.data.data);
         } else {
@@ -85,7 +84,7 @@ export function OngoingQuizzes(): JSX.Element {
   if (loading) {
     return (
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Ongoing Quizzes</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Upcoming Quizzes</h2>
         <div className="flex justify-center items-center py-16">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
         </div>
@@ -96,7 +95,7 @@ export function OngoingQuizzes(): JSX.Element {
   if (error) {
     return (
       <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Ongoing Quizzes</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Upcoming Quizzes</h2>
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           Error: {error}. Please try again later.
         </div>
@@ -107,7 +106,7 @@ export function OngoingQuizzes(): JSX.Element {
   return (
     <div className="mb-8 relative">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">Ongoing Quizzes</h2>
+        <h2 className="text-xl font-semibold text-gray-900">Upcoming Quizzes</h2>
         {quizzes.length > 1 && (
           <div className="flex gap-2">
             <button 
@@ -135,7 +134,7 @@ export function OngoingQuizzes(): JSX.Element {
       >
         {quizzes.length > 0 ? (
           quizzes.map((quiz) => (
-            <Card 
+            <Card
               key={quiz.id} 
               className="flex-shrink-0 w-80"
             >
@@ -177,7 +176,7 @@ export function OngoingQuizzes(): JSX.Element {
           ))
         ) : (
           <div className="flex items-center justify-center w-full py-8 text-gray-500">
-            No ongoing quizzes available at the moment.
+            No upcoming quizzes available at the moment.
           </div>
         )}
       </div>
