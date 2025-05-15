@@ -52,13 +52,15 @@ interface Quiz {
   userId: string;
   isPublic: boolean;
   timeLimit: number | null;
-  passingScore: number;
   questions: QuizQuestion[];
   totalParticipants: number;
   totalQuestions: number;
   leaderboardEntries: number;
   leaderboard?: Leaderboard;
   topScores: LeaderboardEntry[];
+  startDate?: string;
+  endDate?: string;
+  status?: 'upcoming' | 'ongoing' | 'completed';
 }
 
 interface PageParams {
@@ -70,8 +72,9 @@ const Quiz = ({ params }: { params: PageParams }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [joinError, setJoinError] = useState<string | null>(null);
-  const [joinQuiz, setJoiningQuiz] = useState<boolean>(false)
-  const [hasJoined, setHasJoined] = useState<boolean>(false)
+  const [joinQuiz, setJoiningQuiz] = useState<boolean>(false);
+  const [hasJoined, setHasJoined] = useState<boolean>(false);
+  const [quizStatus, setQuizStatus] = useState<'upcoming' | 'ongoing' | 'completed' | null>(null);
 
   // Extract quizId from URL if using app router
   const quizId = params?.quizId;
@@ -81,7 +84,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
     setJoinError(null);
     
     try {
-      const response = await axios.post(`http://localhost:3000/api/v1/quiz/${quizId}/join`, {
+      const response = await axios.post(`http://localhost:3000/api/v1/quiz/${quizId}/join`, {}, {
         withCredentials: true
       });
       
@@ -90,11 +93,41 @@ const Quiz = ({ params }: { params: PageParams }) => {
       } else {
         setJoinError(response.data.message || 'Failed to join quiz');
       }
-    } catch (err) {
-      console.error(err)
+    } catch (err: any) {
+      console.error(err);
+      setJoinError(err?.response?.data?.message || 'Error joining quiz');
     } finally {
       setJoiningQuiz(false);
     }
+  };
+  
+  // Determine quiz status based on dates
+  const determineQuizStatus = (quiz: Quiz): 'upcoming' | 'ongoing' | 'completed' => {
+    if (quiz.status) return quiz.status;
+    
+    const currentDate = new Date();
+    let status: 'upcoming' | 'ongoing' | 'completed' = 'ongoing'; // Default
+    
+    if (quiz.startDate && quiz.endDate) {
+      const startDate = new Date(quiz.startDate);
+      const endDate = new Date(quiz.endDate);
+      
+      if (currentDate < startDate) {
+        status = 'upcoming';
+      } else if (currentDate >= startDate && currentDate <= endDate) {
+        status = 'ongoing';
+      } else {
+        status = 'completed';
+      }
+    } else if (quiz.startDate && !quiz.endDate) {
+      const startDate = new Date(quiz.startDate);
+      status = currentDate >= startDate ? 'ongoing' : 'upcoming';
+    } else if (!quiz.startDate && quiz.endDate) {
+      const endDate = new Date(quiz.endDate);
+      status = currentDate <= endDate ? 'ongoing' : 'completed';
+    }
+    
+    return status;
   };
 
   useEffect(() => {
@@ -112,7 +145,27 @@ const Quiz = ({ params }: { params: PageParams }) => {
           throw new Error(response.data.message || 'Failed to fetch quiz');
         }
 
-        setQuiz(response.data.data as Quiz);
+        const quizData = response.data.data as Quiz;
+        setQuiz(quizData);
+        
+        // Check if user has already joined
+        try {
+          const joinedQuizzes = await axios.get(`http://localhost:3000/api/v1/quiz/user/joined`, {
+            withCredentials: true,
+          });
+          
+          if (joinedQuizzes.data.success) {
+            const hasJoinedThisQuiz = joinedQuizzes.data.data.some((attempt: any) => 
+              attempt.quizId === quizId
+            );
+            setHasJoined(hasJoinedThisQuiz);
+          }
+        } catch (joinError) {
+          console.error('Error checking joined status:', joinError);
+        }
+        
+        // Set quiz status
+        setQuizStatus(determineQuizStatus(quizData));
       } catch (err) {
         console.error('Error fetching quiz:', err);
         setError(
@@ -146,6 +199,46 @@ const Quiz = ({ params }: { params: PageParams }) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  const renderQuizActionButtons = () => {
+    // Only show buttons for ongoing quizzes
+    if (quizStatus !== 'ongoing') {
+      return (
+        <div className="bg-gray-100 p-4 rounded-md text-center">
+          {quizStatus === 'upcoming' ? (
+            <p className="text-yellow-600">This quiz hasn't started yet. Check back when it begins.</p>
+          ) : (
+            <p className="text-gray-600">This quiz has ended and is no longer available.</p>
+          )}
+        </div>
+      );
+    }
+
+    // For ongoing quizzes, show appropriate buttons
+    return (
+      <div className="flex gap-2 w-full justify-center items-center">
+        {!hasJoined ? (
+          <button 
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            onClick={handleJoin}
+            disabled={joinQuiz}
+          >
+            {joinQuiz ? 'Joining...' : 'Join Quiz'}
+          </button>
+        ) : (
+          <Link href={`/user/start-quiz/${quizId}`}>
+            <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+              Start Quiz
+            </button>
+          </Link>
+        )}
+        
+        {joinError && (
+          <p className="text-red-500 mt-2">{joinError}</p>
+        )}
+      </div>
+    );
   };
 
   if (loading) {
@@ -219,7 +312,17 @@ const Quiz = ({ params }: { params: PageParams }) => {
             <h1 className="text-3xl font-bold text-gray-900">{quiz.title}</h1>
             <p className="text-gray-600">{quiz.description}</p>
           </div>
-
+          <div>
+            <span className={`px-3 py-1 text-sm font-medium rounded-full ${
+              quizStatus === 'ongoing' ? 'bg-green-100 text-green-800' : 
+              quizStatus === 'upcoming' ? 'bg-yellow-100 text-yellow-800' : 
+              'bg-gray-100 text-gray-800'
+            }`}>
+              {quizStatus === 'ongoing' ? 'Ongoing' : 
+               quizStatus === 'upcoming' ? 'Upcoming' : 
+               'Completed'}
+            </span>
+          </div>
         </div>
 
         {/* Quiz details */}
@@ -237,6 +340,24 @@ const Quiz = ({ params }: { params: PageParams }) => {
                   <p className="text-gray-800">{formatDate(quiz.createdAt)}</p>
                 </div>
               </div>
+              {quiz.startDate && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="text-sm text-gray-500">Start Date</p>
+                    <p className="text-gray-800">{formatDate(quiz.startDate)}</p>
+                  </div>
+                </div>
+              )}
+              {quiz.endDate && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-gray-500" />
+                  <div>
+                    <p className="text-sm text-gray-500">End Date</p>
+                    <p className="text-gray-800">{formatDate(quiz.endDate)}</p>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-gray-500" />
                 <div>
@@ -249,13 +370,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
                 <div>
                   <p className="text-sm text-gray-500">Questions</p>
                   <p className="text-gray-800">{quiz.totalQuestions}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Award className="h-5 w-5 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-500">Passing Score</p>
-                  <p className="text-gray-800">{quiz.passingScore}%</p>
                 </div>
               </div>
             </div>
@@ -282,10 +396,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-500 mb-1">Status</p>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${quiz.isPublic ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                  {quiz.isPublic ? 'Public' : 'Private'}
-                </span>
               </div>
             </div>
           </div>
@@ -309,8 +419,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
                       <span className="font-medium">{entry.user.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      {/* <span className="text-sm text-gray-600">{formatTime(entry.completionTime)}</span> */}
-                      <span className="font-bold text-blue-600">Score : {entry.score}</span>
+                      <span className="font-bold text-blue-600">Score: {entry.score}/{quiz.questions.length}</span>
                     </div>
                   </div>
                 ))}
@@ -320,18 +429,9 @@ const Quiz = ({ params }: { params: PageParams }) => {
             )}
           </div>
         </div>
-        <div className="flex gap-2 w-ful justify-center items-center">
-          <button 
-          className="px-4 py-2 bg-black text-white rounded-md hover:bg-green-700 transition"
-          onClick={()=>(handleJoin())}>
-            Join Quiz
-          </button>
-          <Link href={`/user/start-quiz/${quizId}`}>
-            <button className="px-4 py-2 bg-black text-white rounded-md hover:bg-green-700 transition">
-              Start Quiz
-            </button>
-          </Link>
-        </div>
+        
+        {/* Quiz action buttons */}
+        {renderQuizActionButtons()}
       </main>
     </div>
   );

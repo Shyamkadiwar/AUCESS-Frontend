@@ -32,7 +32,7 @@ const Quizzes = () => {
     const fetchQuizzes = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/ongoing', {
+        const response = await axios.get('http://localhost:3000/api/v1/quiz/completed', {
           withCredentials: true
         });
 
@@ -73,7 +73,7 @@ const Quizzes = () => {
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Ongoing Quizzes</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Completed Quizzes</h1>
           </div>
           <Link href="/admin/create-quiz">
             <Button className="flex items-center gap-2">

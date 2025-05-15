@@ -18,15 +18,11 @@ export function Sidebar() {
         </Link>
         <Link href={'/user/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <BookOpen className="w-5 h-5" />
-          Quizzes
+          Ongoing Quizzes
         </Link>
-        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+        <Link href={'/user/completed-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Trophy className="w-5 h-5" />
-          Leaderboard
-        </Link>
-        <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Users className="w-5 h-5" />
-          Students
+          Completed Quizzes
         </Link>
         <Link href="#" className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Settings className="w-5 h-5" />

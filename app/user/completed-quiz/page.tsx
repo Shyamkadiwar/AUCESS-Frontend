@@ -1,12 +1,9 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { Plus } from 'lucide-react';
-import { Sidebar } from '@/components/admin/sidebar';
-import { Button } from '@/components/ui/button';
+import { Sidebar } from '@/components/sidebar';
 import { toast } from 'sonner';
 import axios from 'axios';
-import Link from 'next/link';
-import { QuizCard } from '@/components/admin/QuizCard';
+import { QuizCard } from '@/components/QuizCard';
 
 // Define interface for Quiz
 export interface Quiz {
@@ -32,7 +29,7 @@ const Quizzes = () => {
     const fetchQuizzes = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/ongoing', {
+        const response = await axios.get('http://localhost:3000/api/v1/quiz/user/quizzes/completed', {
           withCredentials: true
         });
 
@@ -73,14 +70,9 @@ const Quizzes = () => {
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Ongoing Quizzes</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
           </div>
-          <Link href="/admin/create-quiz">
-            <Button className="flex items-center gap-2">
-              <Plus className="w-4 h-4" />
-              Create New Quiz
-            </Button>
-          </Link>
+          
         </div>
 
         {quizzes.length === 0 ? (

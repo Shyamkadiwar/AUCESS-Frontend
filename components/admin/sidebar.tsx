@@ -1,6 +1,6 @@
 import Logo from '@/public/mainLogo.png'
 import Image from 'next/image';
-import { Home, BookOpen, Trophy, Settings, Users, Plus } from 'lucide-react';
+import { Home, BookOpen, Trophy, Settings, Users, Plus, Timer, TimerOff } from 'lucide-react';
 import { Link } from '../ui/link';
 
 export function Sidebar() {
@@ -22,7 +22,15 @@ export function Sidebar() {
         </Link>
         <Link href={'/admin/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Trophy className="w-5 h-5" />
-          Quizzes
+          Ongoing Quizzes
+        </Link>
+        <Link href={'/admin/upcoming-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+          <Timer className="w-5 h-5" />
+          Upcoming Quizzes
+        </Link>
+        <Link href={'/admin/completed-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
+          <TimerOff className="w-5 h-5" />
+          Completed Quizzes
         </Link>
         <Link href={'/admin/students'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
           <Users className="w-5 h-5" />

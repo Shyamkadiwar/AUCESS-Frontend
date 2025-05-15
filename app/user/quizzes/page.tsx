@@ -19,6 +19,8 @@ export interface Quiz {
   leaderboardEntries: number;
   createdAt: string;
   updatedAt: string;
+  startDate: string;
+  endDate: string;
 }
 
 const Quizzes = () => {
@@ -30,7 +32,7 @@ const Quizzes = () => {
     const fetchQuizzes = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/quizzes', {
+        const response = await axios.get('http://localhost:3000/api/v1/quiz/ongoing', {
           withCredentials: true
         });
 

@@ -1,24 +1,31 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { CheckCircle, BookOpen, Trophy, TrendingUp, ExternalLink } from 'lucide-react';
+import { Card } from '../ui/card';
+import { Users, BookOpen, Trophy, TrendingUp, ExternalLink } from 'lucide-react';
 import axios from 'axios';
-import { Card } from './ui/card';
 
+// Define TypeScript interfaces
 interface StatsDataItem {
   value: string;
 }
 
 interface StatsData {
-  completedQuizzes: StatsDataItem;
-  activeQuizzes: StatsDataItem;
-  upcomingQuizzes: StatsDataItem;
+  students: StatsDataItem;
+  quizzes: StatsDataItem;
+  questions: StatsDataItem;
+  subAdmins: StatsDataItem;
+}
+
+interface Quiz {
+  totalQuestions: number;
 }
 
 export function Stats() {
   const [statsData, setStatsData] = useState<StatsData>({
-    completedQuizzes: { value: '0' },
-    activeQuizzes: { value: '0' },
-    upcomingQuizzes: { value: '0' }
+    students: { value: '0' },
+    quizzes: { value: '0' },
+    questions: { value: '0' },
+    subAdmins: { value: '0' }
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -34,21 +41,24 @@ export function Stats() {
         };
         
         // Fetch all data in parallel
-        const [completedResponse, ongoingResponse, upcomingResponse] = await Promise.all([
-          axios.get('http://localhost:3000/api/v1/quiz/completed', axiosConfig),
+        const [usersResponse, ongoingResponse, upcomingResponse, subAdminsResponse] = await Promise.all([
+          axios.get('http://localhost:3000/api/v1/users/', axiosConfig),
           axios.get('http://localhost:3000/api/v1/quiz/ongoing', axiosConfig),
-          axios.get('http://localhost:3000/api/v1/quiz/upcoming', axiosConfig)
+          axios.get('http://localhost:3000/api/v1/quiz/upcoming', axiosConfig),
+          axios.get('http://localhost:3000/api/v1/admin/sub-admins', axiosConfig)
         ]);
 
         // Process the responses
-        const completedQuizzes = completedResponse.data.count || completedResponse.data.data.length;
-        const ongoingQuizzes = ongoingResponse.data.count || ongoingResponse.data.data.length;
-        const upcomingQuizzes = upcomingResponse.data.count || upcomingResponse.data.data.length;
+        const totalStudents = usersResponse.data.count || usersResponse.data.data.length;
+        const ongoingQuizzC = ongoingResponse.data.count || ongoingResponse.data.data.length;
+        const upcomingQuizzC = upcomingResponse.data.count || upcomingResponse.data.data.length;
+        const totalSubAdmins = subAdminsResponse.data.count || subAdminsResponse.data.subAdmins.length;
 
         setStatsData({
-          completedQuizzes: { value: completedQuizzes.toLocaleString() },
-          activeQuizzes: { value: ongoingQuizzes.toLocaleString() },
-          upcomingQuizzes: { value: upcomingQuizzes.toLocaleString() }
+          students: { value: totalStudents.toLocaleString() },
+          quizzes: { value: ongoingQuizzC.toLocaleString() },
+          questions: { value: upcomingQuizzC.toLocaleString() },
+          subAdmins: { value: totalSubAdmins.toLocaleString() }
         });
         
         setLoading(false);
@@ -65,25 +75,32 @@ export function Stats() {
   // Define stats configuration
   const stats = [
     {
-      label: 'Quiz Attempted',
-      value: statsData.completedQuizzes.value,
-      icon: CheckCircle,
+      label: 'Total Students',
+      value: statsData.students.value,
+      icon: Users,
       color: 'text-blue-600',
-      link: 'http://localhost:3001/user/completed-quiz/'
+      link: 'http://localhost:3001/admin/students/'
     },
     {
       label: 'Active Quizzes',
-      value: statsData.activeQuizzes.value,
+      value: statsData.quizzes.value,
       icon: Trophy,
       color: 'text-green-600',
-      link: 'http://localhost:3001/user/quizzes/'
+      link: 'http://localhost:3001/admin/quiz/'
     },
     {
       label: 'Upcoming Quizzes',
-      value: statsData.upcomingQuizzes.value,
+      value: statsData.questions.value,
       icon: BookOpen,
       color: 'text-purple-600',
-      link: 'http://localhost:3001/user/dashboard'
+      link: 'http://localhost:3001/admin/quizzes'
+    },
+    {
+      label: 'Sub Admins',
+      value: statsData.subAdmins.value,
+      icon: TrendingUp,
+      color: 'text-orange-600',
+      link: 'http://localhost:3001/admin/sub-admin'
     },
   ];
 
