@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { Trophy, Clock, Users, DollarSign, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { Trophy, Clock, Users, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Link } from '../ui/link';
 
@@ -29,7 +29,7 @@ export function UpcomingQuizzes(): JSX.Element {
     const fetchQuizzes = async (): Promise<void> => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/upcoming', {withCredentials:true});
+        const response = await axios.get('http://localhost:3000/api/v1/quiz/upcoming', { withCredentials: true });
         if (response.data.success) {
           setQuizzes(response.data.data);
         } else {
@@ -49,37 +49,37 @@ export function UpcomingQuizzes(): JSX.Element {
   const handleScroll = (direction: 'left' | 'right'): void => {
     const container = containerRef.current;
     if (!container) return;
-    
+
     const scrollAmount = container.offsetWidth * 0.75;
-    const newPosition = direction === 'left' 
+    const newPosition = direction === 'left'
       ? Math.max(0, scrollPosition - scrollAmount)
       : Math.min(container.scrollWidth - container.offsetWidth, scrollPosition + scrollAmount);
-    
+
     container.scrollTo({
       left: newPosition,
       behavior: 'smooth'
     });
-    
+
     setScrollPosition(newPosition);
   };
 
   // Format date difference as time left
   const getTimeLeft = (endDate: string | null): string => {
     if (!endDate) return "No deadline";
-    
+
     const end = new Date(endDate);
     const now = new Date();
     const diff = end.getTime() - now.getTime();
-    
+
     if (diff <= 0) return "Ended";
-    
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
+
     if (days > 0) {
-      return `${days}d ${hours}h left`;
+      return `${days}d ${hours}h`;
     }
-    return `${hours}h left`;
+    return `${hours}h`;
   };
 
   if (loading) {
@@ -110,25 +110,25 @@ export function UpcomingQuizzes(): JSX.Element {
         <h2 className="text-xl font-semibold text-gray-900">Upcoming Quizzes</h2>
         {quizzes.length > 1 && (
           <div className="flex gap-2">
-            <button 
+            <button
               onClick={() => handleScroll('left')}
               className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 text-black" />
             </button>
-            <button 
+            <button
               onClick={() => handleScroll('right')}
               className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
               aria-label="Scroll right"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-5 h-5 text-black" />
             </button>
           </div>
         )}
       </div>
 
-      <div 
+      <div
         ref={containerRef}
         className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -136,15 +136,15 @@ export function UpcomingQuizzes(): JSX.Element {
         {quizzes.length > 0 ? (
           quizzes.map((quiz) => (
             <Card
-              key={quiz.id} 
-              className="flex-shrink-0 w-80"
+              key={quiz.id}
+              className="flex-shrink-0 w-[30rem] bg-sky-50"
             >
               <div className="p-4">
                 <div className="flex flex-col h-full">
                   <h3 className="font-semibold text-black text-lg mb-2">{quiz.title}</h3>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2">{quiz.description}</p>
-                  
-                  <div className="flex gap-4 text-sm text-gray-600 mb-3">
+
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                     <div className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
                       {quiz.totalParticipants}
@@ -153,22 +153,20 @@ export function UpcomingQuizzes(): JSX.Element {
                       <BookOpen className="w-4 h-4" />
                       {quiz.totalQuestions} Q
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-1 text-sm text-orange-600 mb-4">
+                    <div className="flex text-sm text-purple-700 w-fit rounded-3xl p-2 bg-purple-100">
                     <Clock className="w-4 h-4" />
-                    {getTimeLeft(quiz.endDate)}
+                    Starts in {getTimeLeft(quiz.endDate)}
+                    </div>
                   </div>
-                  
+
                   <div className="mt-auto">
                     <div className="flex items-center gap-2 text-green-600 font-semibold mb-2">
-                      <Trophy className="w-4 h-4" />
-                      ${quiz.price} Prize
+                      Entry Fee: ${quiz.price}
                     </div>
                     <Link href={`/admin/quiz/${quiz.id}`}>
-                    <button className="w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700 transition-colors flex items-center justify-center gap-1">
-                      View
-                    </button>
+                      <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-400 transition-colors flex items-center justify-center gap-1">
+                        View
+                      </button>
                     </Link>
                   </div>
                 </div>

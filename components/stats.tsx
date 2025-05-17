@@ -35,7 +35,7 @@ export function Stats() {
         
         // Fetch all data in parallel
         const [completedResponse, ongoingResponse, upcomingResponse] = await Promise.all([
-          axios.get('http://localhost:3000/api/v1/quiz/completed', axiosConfig),
+          axios.get('http://localhost:3000/api/v1/quiz/user/quizzes/completed', axiosConfig),
           axios.get('http://localhost:3000/api/v1/quiz/ongoing', axiosConfig),
           axios.get('http://localhost:3000/api/v1/quiz/upcoming', axiosConfig)
         ]);
@@ -94,7 +94,7 @@ export function Stats() {
   return (
     <div className="flex flex-col w-full justify-between lg:flex-row gap-6 mb-8">
       {stats.map((stat) => (
-        <Card key={stat.label} className="w-full flex flex-col p-4 relative">
+        <Card key={stat.label} className="w-full flex flex-col p-4 relative bg-sky-50">
           <div className="flex items-start w-full justify-between">
             <div>
               <p className="text-gray-600 text-sm">{stat.label}</p>

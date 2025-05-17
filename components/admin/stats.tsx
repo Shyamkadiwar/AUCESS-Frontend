@@ -111,7 +111,7 @@ export function Stats() {
   return (
     <div className="flex flex-col w-full justify-between lg:flex-row gap-6 mb-8">
       {stats.map((stat) => (
-        <Card key={stat.label} className="w-full flex flex-col p-4 relative">
+        <Card key={stat.label} className="w-full bg-sky-50 flex flex-col p-4 relative">
           <div className="flex items-start w-full justify-between">
             <div>
               <p className="text-gray-600 text-sm">{stat.label}</p>

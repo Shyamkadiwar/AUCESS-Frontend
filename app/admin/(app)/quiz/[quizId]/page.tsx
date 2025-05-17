@@ -209,7 +209,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
   if (loading) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -225,7 +225,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
   if (error) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -247,7 +247,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
   if (!quiz) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -268,7 +268,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
@@ -300,7 +300,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
         {/* Delete Confirmation Modal */}
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="bg-sky-50 rounded-lg p-6 w-full max-w-md">
               <div className="flex items-center gap-3 mb-4 text-red-600">
                 <AlertCircle className="h-6 w-6" />
                 <h3 className="text-xl font-semibold">Delete Quiz</h3>
@@ -330,7 +330,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
         {/* Quiz details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center gap-3 mb-4">
               <FileText className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-semibold text-gray-800">Overview</h2>
@@ -378,7 +378,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center gap-3 mb-4">
               <Users className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-semibold text-gray-800">Participation</h2>
@@ -418,15 +418,12 @@ const Quiz = ({ params }: { params: PageParams }) => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg text-black shadow-sm border border-gray-200">
+          <div className="bg-sky-50 p-6 rounded-lg text-black shadow-sm border border-gray-200">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <Award className="h-6 w-6 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-800">Top Scores</h2>
               </div>
-              <button className="text-sm text-blue-600 hover:text-blue-800">
-                View All
-              </button>
             </div>
             {quiz.topScores && quiz.topScores.length > 0 ? (
               <div className="space-y-2">
@@ -451,7 +448,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
         {/* Quiz Participants Table */}
         {showUsers && (
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mt-6">
+          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200 mt-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <Users className="h-6 w-6 text-blue-600" />

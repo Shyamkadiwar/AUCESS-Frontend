@@ -2,44 +2,10 @@ import { BookOpen, TrendingUp, Clock, CalendarClock, CheckCircle } from 'lucide-
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Quiz } from '@/app/admin/(app)/quizzes/page';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';// Assuming you're using react-hot-toast for notifications
+import { useRouter } from 'next/navigation';
 
 export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-
-  useEffect(() => {
-    checkAdminStatus();
-  }, []);
-
-  // Function to check admin status
-  const checkAdminStatus = async () => {
-    try {
-      // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get('http://localhost:3000/api/v1/admin/dashboard', {
-        withCredentials: true
-      });
-      
-      if (response.data && response.data.user) {
-        // Set admin status based on user role
-        const isUserAdmin = response.data.user.role === 'ADMIN';
-        setIsAdmin(isUserAdmin);
-        
-        // If not admin, redirect to dashboard or another appropriate page
-        // if (!isUserAdmin) {
-        //   toast.error('Access denied. Only administrators can create quizzes.');
-        //   router.push('/admin/dashboard');
-        // }
-      }
-    } catch (err) {
-      console.error('Authentication error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // Format date to display month and day
   const formatDate = (dateString: string | null) => {
@@ -106,7 +72,7 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const quizStatus = getQuizStatusInfo();
 
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <div className="bg-sky-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div className="flex flex-col">
@@ -144,12 +110,6 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
 
         <div className="flex justify-between items-center text-black border-t pt-4 mt-4">
           <div className="flex flex-col">
-            {/* Only show created date if user is admin */}
-            {isAdmin && (
-              <span className="text-xs text-gray-500">
-                Created: {formatDate(quiz.createdAt)}
-              </span>
-            )}
             {quiz.startDate && (
               <span className="text-xs text-gray-500">
                 Start: {formatDate(quiz.startDate)}

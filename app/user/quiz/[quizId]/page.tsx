@@ -202,20 +202,30 @@ const Quiz = ({ params }: { params: PageParams }) => {
   };
 
   const renderQuizActionButtons = () => {
-    // Only show buttons for ongoing quizzes
-    if (quizStatus !== 'ongoing') {
+    // Show "Show Results" button for completed quizzes
+    if (quizStatus === 'completed') {
       return (
-        <div className="bg-gray-100 p-4 rounded-md text-center">
-          {quizStatus === 'upcoming' ? (
-            <p className="text-yellow-600">This quiz hasn't started yet. Check back when it begins.</p>
-          ) : (
-            <p className="text-gray-600">This quiz has ended and is no longer available.</p>
-          )}
+        <div className="flex gap-2 w-full justify-center items-center">
+          <Link href={`/user/quiz-result/${quizId}`}>
+            <button className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
+              Show Results
+            </button>
+          </Link>
+          <p className="text-gray-600">This quiz has ended. You can view your results.</p>
         </div>
       );
     }
-
-    // For ongoing quizzes, show appropriate buttons
+    
+    // Show message for upcoming quizzes
+    if (quizStatus === 'upcoming') {
+      return (
+        <div className="bg-gray-100 p-4 rounded-md text-center">
+          <p className="text-yellow-600">This quiz hasn't started yet. Check back when it begins.</p>
+        </div>
+      );
+    }
+    
+    // For ongoing quizzes, show join/start buttons
     return (
       <div className="flex gap-2 w-full justify-center items-center">
         {!hasJoined ? (
@@ -259,7 +269,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
   if (error) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -281,7 +291,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
   if (!quiz) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -302,7 +312,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
@@ -327,7 +337,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
 
         {/* Quiz details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center gap-3 mb-4">
               <FileText className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-semibold text-gray-800">Overview</h2>
@@ -375,7 +385,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center gap-3 mb-4">
               <Users className="h-6 w-6 text-blue-600" />
               <h2 className="text-xl font-semibold text-gray-800">Participation</h2>
@@ -400,15 +410,12 @@ const Quiz = ({ params }: { params: PageParams }) => {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg text-black shadow-sm border border-gray-200">
+          <div className="bg-sky-50 p-6 rounded-lg text-black shadow-sm border border-gray-200">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <Award className="h-6 w-6 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-800">Top Scores</h2>
               </div>
-              <button className="text-sm text-blue-600 hover:text-blue-800">
-                View All
-              </button>
             </div>
             {quiz.topScores && quiz.topScores.length > 0 ? (
               <div className="space-y-2">

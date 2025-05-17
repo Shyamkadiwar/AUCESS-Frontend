@@ -1,37 +1,142 @@
 "use client"
 import { OngoingQuizzes } from '@/components/admin/onGoingContest';
 import { UpcomingQuizzes } from '@/components/admin/upcomingContest';
-import { QuizList } from '@/components/quizList';
 import { Stats } from '@/components/admin/stats';
-import { Bell, Plus } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { Sidebar } from '@/components/admin/sidebar';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import axios from 'axios';
+
+// Define types for admin data
+type AdminProfile = {
+  id: string;
+  email: string;
+  name: string;
+  isSuper?: boolean;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  admin?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  _count?: {
+    subAdmins: number;
+    quizzes: number;
+  };
+};
+
+type SubAdminProfile = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  admin?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  _count?: {
+    subAdmins: number;
+    quizzes: number;
+  };
+};
+
+type ProfileData = AdminProfile | SubAdminProfile;
 
 const DashboardComponent = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [adminName, setAdminName] = useState('Admin');
+  const [role, setRole] = useState('');
+  const [adminData, setAdminData] = useState<ProfileData | null>(null);
+
+  useEffect(() => {
+    const fetchAdminProfile = async () => {
+      try {
+        setIsLoading(true);
+        
+        const response = await axios.get('http://localhost:3000/api/v1/admin/admin-profile', {
+          withCredentials: true
+        });
+        
+        if (response.data && response.data.success) {
+          const profile = response.data.admin;
+          
+          // Store the complete admin data
+          setAdminData(profile);
+          
+          // Set admin name
+          if (profile.name) {
+            setAdminName(profile.name);
+          }
+          
+          // Set role and admin status
+          if (profile.role) {
+            setRole(profile.role);
+            setIsAdmin(profile.role === 'ADMIN');
+          }
+        } else {
+          toast.error('Failed to fetch profile information');
+        }
+      } catch (err) {
+        console.error('Authentication error:', err);
+        toast.error('Authentication failed. Please login again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAdminProfile();
+  }, []);
+
+  // Generate appropriate welcome message based on role
+  const getWelcomeMessage = () => {
+    if (role === 'ADMIN') {
+      return `Welcome back, Admin ${adminName}!`;
+    } else if (role === 'SUB_ADMIN') {
+      return `Welcome back, Sub-Admin ${adminName}!`;
+    } else {
+      return `Welcome back, ${adminName}!`;
+    }
+  };
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-bl from-blue-200 to-blue-300">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
+            <h1 className="text-3xl font-bold text-gray-900">{getWelcomeMessage()}</h1>
             <p className="text-gray-600 text-lg">Here&apos;s what&apos;s happening with your quizzes today.</p>
           </div>
 
           <div className="flex items-center gap-6">
-            <button className="p-2.5 rounded-full hover:bg-white hover:shadow-md transition-all duration-200 relative">
-              <Bell className="w-6 h-6 text-gray-600" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
-            </button>
             <div className="flex items-center gap-3">
-              {/* <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40"
-                alt="Profile"
-                className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow-md"
-              /> */}
               <div className="hidden md:block">
-                <p className="font-medium text-gray-900">Admin Name</p>
+                <p className="font-medium text-lg text-gray-900">
+                  {role === 'ADMIN' ? 'Admin' : 'Sub-Admin'}: {adminName}
+                </p>
+                {adminData && role === 'ADMIN' && (
+                  <p className="text-sm text-gray-500">
+                    {adminData._count?.quizzes || 0} Quizzes · {adminData._count?.subAdmins || 0} Sub-Admins
+                  </p>
+                )}
+                {adminData && role === 'SUB_ADMIN' && (
+                  <p className="text-sm text-gray-500">
+                    Managed by: {adminData.admin?.name || 'Unknown Admin'}
+                  </p>
+                )}
               </div>
             </div>
           </div>
