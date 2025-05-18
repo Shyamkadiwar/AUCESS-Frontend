@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Quiz } from '@/app/admin/(app)/quizzes/page';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';// Assuming you're using react-hot-toast for notifications
+import { useRouter } from 'next/navigation';
 
 export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -106,7 +106,7 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const quizStatus = getQuizStatusInfo();
 
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <div className="bg-sky-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div className="flex flex-col">

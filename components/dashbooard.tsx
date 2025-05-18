@@ -1,36 +1,107 @@
-import { Sidebar } from './sidebar';
-import { Stats } from './stats';
-import { OngoingQuizzes } from './onGoingContest';
-import { UpcomingQuizzes } from './upcomingContest';
-import { Bell, Plus } from 'lucide-react';
+"use client"
+import { OngoingQuizzes } from '@/components/onGoingContest';
+import { UpcomingQuizzes } from '@/components/upcomingContest';
+import { Stats } from '@/components/stats';
+import { Sidebar } from '@/components/sidebar';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import axios from 'axios';
+
+// Define interfaces for type safety
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  user: {
+    id: string;
+    name?: string;
+    email: string;
+    role: string;
+  };
+}
 
 const DashboardComponent = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<User>({
+    id: '',
+    name: 'User',
+    email: '',
+    role: ''
+  });
+
+  // Fetch user profile data on component mount
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get<ApiResponse>('http://localhost:3000/api/v1/auth/profile', {
+          withCredentials: true
+        });
+
+        if (response.data && response.data.success) {
+          setUser({
+            id: response.data.user.id,
+            name: response.data.user.name || 'User',
+            email: response.data.user.email,
+            role: response.data.user.role
+          });
+        }
+      } catch (err) {
+        console.error('Failed to fetch user profile:', err);
+        toast.error('Unable to load your profile. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  const getWelcomeMessage = (): string => {
+    const currentHour = new Date().getHours();
+    let greeting = '';
+
+    if (currentHour < 12) {
+      greeting = 'Good morning';
+    } else if (currentHour < 18) {
+      greeting = 'Good afternoon';
+    } else {
+      greeting = 'Good evening';
+    }
+
+    return `${greeting}, ${user.name}!`;
+  };
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
+  }
+
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className='hidden md:flex'>
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="hidden md:flex">
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
+            <h1 className="text-3xl font-bold text-gray-900">{getWelcomeMessage()}</h1>
             <p className="text-gray-600 text-lg">Here&apos;s what&apos;s happening with your quizzes today.</p>
           </div>
 
           <div className="flex items-center gap-6">
-            <button className="p-2.5 rounded-full hover:bg-white hover:shadow-md transition-all duration-200 relative">
-              <Bell className="w-6 h-6 text-gray-600" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
-            </button>
             <div className="flex items-center gap-3">
-              {/* <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=40&h=40"
-                alt="Profile"
-                className="w-11 h-11 rounded-full object-cover ring-2 ring-white shadow-md"
-              /> */}
               <div className="hidden md:block">
-                <p className="font-medium text-gray-900">Sarah Wilson</p>
-                <p className="text-sm text-gray-500">Premium User</p>
+                <p className="font-medium text-gray-900">
+                  User : {user.name}
+                </p>
+                <p className="font-medium text-gray-400">
+                  Email : {user.email}
+                </p>
               </div>
             </div>
           </div>

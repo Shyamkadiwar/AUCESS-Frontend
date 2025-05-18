@@ -148,7 +148,7 @@ const Students = () => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
@@ -167,8 +167,8 @@ const Students = () => {
             </div>
           )}
           
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
+          <div className="bg-sky-50 shadow rounded-lg overflow-hidden">
+            <div className="overflow-x-auto bg-sky-50">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>

@@ -192,7 +192,7 @@ const CreateQuiz = () => {
   // Access denied state (should redirect, but just in case)
   if (!isAdmin) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -211,7 +211,7 @@ const CreateQuiz = () => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
@@ -223,7 +223,7 @@ const CreateQuiz = () => {
           </div>
         </div>
 
-        <div className="bg-white text-black shadow-md rounded-lg p-6 space-y-6">
+        <div className="bg-sky-50 text-black shadow-md rounded-lg p-6 space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="title">Quiz Title</Label>
@@ -328,7 +328,7 @@ const CreateQuiz = () => {
             <Button 
               onClick={handleCreateQuiz}
               disabled={!title || !description || questions.length === 0}
-              className="flex items-center gap-2"
+              className="flex bg-blue-500 items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Create Quiz

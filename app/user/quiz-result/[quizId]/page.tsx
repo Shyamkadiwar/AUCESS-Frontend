@@ -125,7 +125,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
   // Loading state
   if (loading) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -142,7 +142,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
   // Error state
   if (error) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -166,7 +166,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
   // Result not found
   if (!result) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
@@ -188,7 +188,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
@@ -205,7 +205,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
         </div>
 
         {/* Results summary card */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
+        <div className="bg-sky-50 rounded-lg shadow-sm border border-gray-200 mb-8">
           <div className="p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-1">{result.quizTitle}</h2>
             <p className="text-gray-500 mb-6">Completed on {formatDate(result.completedAt)}</p>
@@ -224,7 +224,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
               </div>
               
               {/* Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full md:w-auto">
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-4 w-full md:w-auto">
                 <div className="bg-gray-50 p-4 rounded-lg text-center">
                   <Award className="h-6 w-6 text-blue-600 mx-auto mb-2" />
                   <p className="text-gray-500 text-sm">Rank</p>
@@ -237,12 +237,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
                   <Users className="h-6 w-6 text-blue-600 mx-auto mb-2" />
                   <p className="text-gray-500 text-sm">Participants</p>
                   <p className="text-xl font-bold text-gray-800">{result.totalParticipants}</p>
-                </div>
-                
-                <div className="bg-gray-50 p-4 rounded-lg text-center col-span-2 md:col-span-1">
-                  <Clock className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-                  <p className="text-gray-500 text-sm">Completion Time</p>
-                  <p className="text-xl font-bold text-gray-800">3:45</p>
                 </div>
               </div>
             </div>
@@ -267,7 +261,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
         </div>
         
         {/* Leaderboard section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
+        <div className="bg-sky-50 rounded-lg shadow-sm border border-gray-200 mb-8">
           <div className="p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <Award className="h-6 w-6 text-blue-600" />
@@ -311,7 +305,7 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
                         {entry.rank === result.rank && ' (You)'}
                       </td>
                       <td className="px-4 py-3 text-right font-bold">
-                        {entry.score}
+                        {entry.score} / {result.totalQuestions}
                       </td>
                     </tr>
                   ))}
