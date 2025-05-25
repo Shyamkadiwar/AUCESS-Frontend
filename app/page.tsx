@@ -13,7 +13,7 @@ export default function Home() {
     <div className="h-full relative overflow-hidden">
       <Navbar />
       <HeroComponent />
-      <ChooseOptions />
+      {/* <ChooseOptions /> */}
       <Pitch />
       <LeaderBoard />
       <HowItWorks />

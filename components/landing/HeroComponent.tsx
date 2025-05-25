@@ -3,7 +3,7 @@ import trophy from './assets/gold-trophy-with-name-plate-winner-competition_6870
 import { Button } from "../ui/button";
 
 const HeroComponent = () => {
-  return <div className="w-full relative h-full flex flex-col items-center px-4 z-30 pt-48 pb-20">
+  return <div className="w-full relative h-full min-h-screen flex flex-col items-center px-4 z-30 pt-48 pb-20">
     <div className="w-full max-w-7xl justify-center flex flex-row items-center">
       <div className="flex flex-col w-full md:w-2/3 text-center md:text-left gap-6">
         <div className="flex flex-col w-full justify-center">
