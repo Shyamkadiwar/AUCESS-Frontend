@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import axios from 'axios';
 
-// Define interfaces for type safety
 interface User {
   id: string;
   name: string;
@@ -33,8 +32,6 @@ const DashboardComponent = () => {
     email: '',
     role: ''
   });
-
-  // Fetch user profile data on component mount
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {

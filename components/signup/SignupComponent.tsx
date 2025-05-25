@@ -12,6 +12,7 @@ const SignUpComponent = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [agreeToTerms, setAgreeToTerms] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -28,7 +29,15 @@ const SignUpComponent = () => {
     setPassword(e.target.value);
   }
 
+  const handleAgreeToTerms = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAgreeToTerms(e.target.checked);
+  }
+
   const handleGoogleSignUp = () => {
+    if (!agreeToTerms) {
+      setError("Please agree to the Terms of Service and Privacy Policy");
+      return;
+    }
     setLoading(true);
     window.location.href = "http://localhost:3000/api/v1/auth/google/dashboard";
   }
@@ -39,6 +48,7 @@ const SignUpComponent = () => {
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email";
     if (!password.trim()) return "Password is required";
     if (password.length < 6) return "Password must be at least 6 characters";
+    if (!agreeToTerms) return "Please agree to the Terms of Service and Privacy Policy";
     return null;
   }
 
@@ -129,7 +139,7 @@ const SignUpComponent = () => {
               </div>
 
               {error && (
-                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-center mx-auto max-w-xs">
                   {error}
                 </div>
               )}
@@ -156,9 +166,46 @@ const SignUpComponent = () => {
                   value={password}
                   onChange={handlePassword}
                 />
+                
+                {/* Terms and Privacy Agreement Checkbox */}
+                <div className="w-full flex items-start gap-3 mt-4">
+                  <input
+                    type="checkbox"
+                    id="agreeToTerms"
+                    checked={agreeToTerms}
+                    onChange={handleAgreeToTerms}
+                    className="mt-1 w-4 h-4 text-azure-radiance-950 bg-gray-100 border-gray-300 rounded focus:ring-azure-radiance-500 focus:ring-2"
+                  />
+                  <label htmlFor="agreeToTerms" className="text-xs text-gray-600 leading-relaxed">
+                    I agree to Aucess&apos;s{' '}
+                    <Link 
+                      href={'/terms-conditions'} 
+                      className="font-bold text-azure-radiance-950 underline hover:text-azure-radiance-900 transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Terms of Service
+                    </Link>
+                    {' '}and{' '}
+                    <Link 
+                      href={'/privacy-policy'} 
+                      className="font-bold text-azure-radiance-950 underline hover:text-azure-radiance-900 transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </label>
+                </div>
+                
                 <button
-                  className="mt-5 tracking-wide font-semibold bg-azure-radiance-950 text-gray-100 w-full py-4 rounded-lg hover:bg-azure-radiance-900 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
-                  onClick={handleSubmit}>
+                  className={`mt-5 tracking-wide font-semibold w-full py-4 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none ${
+                    agreeToTerms 
+                      ? 'bg-azure-radiance-950 text-gray-100 hover:bg-azure-radiance-900' 
+                      : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                  }`}
+                  onClick={handleSubmit}
+                  disabled={!agreeToTerms}>
                   <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2"
                     strokeLinecap="round" strokeLinejoin="round">
                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
@@ -169,10 +216,13 @@ const SignUpComponent = () => {
                     Sign Up
                   </span>
                 </button>
-                <h5>Already have an account? <Link href={'/signin'} className="underline">Sign In</Link></h5>
-                <p className="mt-6 text-xs text-gray-600 text-center">
-                  I agree to abide by Aucess&apos;s <Link href={'#'} className="font-bold underline">Terms of Service</Link> and its <Link href={'#'} className="font-bold underline">Privacy Policy</Link>
-                </p>
+                
+                <h5 className="mt-4">
+                  Already have an account?{' '}
+                  <Link href={'/signin'} className="text-azure-radiance-950 font-semibold underline hover:text-azure-radiance-900 transition-colors">
+                    Sign In
+                  </Link>
+                </h5>
               </div>
             </div>
           </div>

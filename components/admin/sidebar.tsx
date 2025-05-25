@@ -1,6 +1,6 @@
 import Logo from '@/public/mainLogo.png'
 import Image from 'next/image';
-import { Home, BookOpen, Trophy, Settings, Users, Plus, Timer, TimerOff, LogOut } from 'lucide-react';
+import { Home, Trophy, Users, Plus, Timer, TimerOff, LogOut } from 'lucide-react';
 import { Link } from '../ui/link';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -20,7 +20,6 @@ export function Sidebar() {
       
       if (response.data && response.data.success) {
         toast.success('Logged out successfully');
-        // Redirect to home page after successful logout
         router.push('/');
       }
     } catch (error) {

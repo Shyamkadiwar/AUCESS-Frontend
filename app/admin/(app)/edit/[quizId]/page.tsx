@@ -35,9 +35,7 @@ interface DashboardResponse {
 const formatDateForInput = (dateString: string | null): string => {
   if (!dateString) return '';
   
-  // Convert to local ISO string and format for datetime-local input
   const date = new Date(dateString);
-  // Format: YYYY-MM-DDThh:mm
   return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
     .toISOString()
     .slice(0, 16);
@@ -60,25 +58,20 @@ const EditQuiz = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
 
-  // Check if user is authorized (admin only)
   const checkAdminStatus = async () => {
     try {
-      // Use the dashboard endpoint to check if user is authenticated and their role
       const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
         withCredentials: true
       });
       
       if (response.data && response.data.user) {
-        // Set admin status based on user role
         const isUserAdmin = response.data.user.role === 'ADMIN';
         setIsAdmin(isUserAdmin);
         
-        // If not admin, redirect to dashboard or another appropriate page
         if (!isUserAdmin) {
           toast.error('Access denied. Only administrators can edit quizzes.');
           router.push('/admin/dashboard');
         } else {
-          // Fetch quiz data if user is admin
           fetchQuizData();
         }
       }
@@ -136,10 +129,8 @@ const EditQuiz = () => {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       
-      // Convert Excel to JSON
       const data = XLSX.utils.sheet_to_json(worksheet);
       
-      // Transform data to match our quiz question structure
       const parsedQuestions: QuizQuestion[] = data.map((row: any) => ({
         text: row['Question Text'],
         correctAnswer: row['Correct Answer'],
@@ -170,13 +161,11 @@ const EditQuiz = () => {
   };
 
   const handleUpdateQuiz = async () => {
-    // Validate inputs
     if (!title || !description) {
       toast.error('Please fill in all required fields');
       return;
     }
 
-    // Validate dates if both are provided
     if (!validateDates()) {
       return;
     }
@@ -184,7 +173,6 @@ const EditQuiz = () => {
     setIsSubmitting(true);
     
     try {
-      // Determine if we're replacing questions
       const operation = fileName ? 'replace' : undefined;
       
       const response = await axios.patch(
@@ -240,7 +228,6 @@ const EditQuiz = () => {
     XLSX.writeFile(workbook, 'quiz_template.xlsx');
   };
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">
@@ -249,7 +236,6 @@ const EditQuiz = () => {
     );
   }
 
-  // Access denied state (should redirect, but just in case)
   if (!isAdmin) {
     return (
       <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
@@ -270,7 +256,6 @@ const EditQuiz = () => {
     );
   }
 
-  // Fetching quiz data
   if (isFetching) {
     return (
       <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">

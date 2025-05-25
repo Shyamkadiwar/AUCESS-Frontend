@@ -34,7 +34,6 @@ const CreateQuiz = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
 
-  // Check if user is authorized (admin only)
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
@@ -43,15 +42,8 @@ const CreateQuiz = () => {
       });
       
       if (response.data && response.data.user) {
-        // Set admin status based on user role
         const isUserAdmin = response.data.user.role === 'ADMIN';
         setIsAdmin(isUserAdmin);
-        
-        // If not admin, redirect to dashboard or another appropriate page
-        // if (!isUserAdmin) {
-        //   toast.error('Access denied. Only administrators can create quizzes.');
-        //   router.push('/admin/dashboard');
-        // }
       }
     } catch (err) {
       console.error('Authentication error:', err);
@@ -78,10 +70,8 @@ const CreateQuiz = () => {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       
-      // Convert Excel to JSON
       const data = XLSX.utils.sheet_to_json(worksheet);
       
-      // Transform data to match our quiz question structure
       const parsedQuestions: QuizQuestion[] = data.map((row: any) => ({
         text: row['Question Text'],
         correctAnswer: row['Correct Answer'],
@@ -112,13 +102,11 @@ const CreateQuiz = () => {
   };
 
   const handleCreateQuiz = async () => {
-    // Validate inputs
     if (!title || !description || questions.length === 0) {
       toast.error('Please fill in all required fields and upload questions');
       return;
     }
 
-    // Validate dates if both are provided
     if (!validateDates()) {
       return;
     }
@@ -180,7 +168,6 @@ const CreateQuiz = () => {
     XLSX.writeFile(workbook, 'quiz_template.xlsx');
   };
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">
@@ -189,7 +176,6 @@ const CreateQuiz = () => {
     );
   }
 
-  // Access denied state (should redirect, but just in case)
   if (!isAdmin) {
     return (
       <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">

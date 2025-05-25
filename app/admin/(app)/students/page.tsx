@@ -5,7 +5,6 @@ import { Sidebar } from '@/components/admin/sidebar';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 
-// Define TypeScript interfaces
 interface User {
   id: string;
   email: string;
@@ -57,38 +56,32 @@ const Students = () => {
 
   const checkAdminStatus = async () => {
     try {
-      // Use the dashboard endpoint to check if user is authenticated and their role
       const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
         withCredentials: true
       });
       
       if (response.data && response.data.user) {
-        // Set admin/subadmin status based on user role
         setIsAdmin(response.data.user.role === 'ADMIN');
         setIsSubAdmin(response.data.user.role === 'SUB_ADMIN');
       }
     } catch (err) {
       const axiosError = err as AxiosError;
       if (axiosError.response?.status === 401 || axiosError.response?.status === 403) {
-        // If unauthorized, redirect to login
         router.push('/admin/sigin');
       }
     }
   };
 
-  // Confirm deletion modal
   const confirmDelete = (userId: string) => {
     setUserToDelete(userId);
     setShowDeleteModal(true);
   };
 
-  // Cancel delete action
   const cancelDelete = () => {
     setUserToDelete(null);
     setShowDeleteModal(false);
   };
 
-  // Proceed with deletion after confirmation
   const proceedWithDelete = async () => {
     if (!userToDelete) return;
     
@@ -98,9 +91,7 @@ const Students = () => {
       });
       
       if (response.data && response.status === 200) {
-        // Refresh the user list after successful deletion
         fetchUsers();
-        // Reset deletion state
         setUserToDelete(null);
         setShowDeleteModal(false);
       }
@@ -108,21 +99,17 @@ const Students = () => {
       console.error('Error deleting user:', err);
       const axiosError = err as AxiosError<{ message: string }>;
       setError('Failed to delete user. ' + (axiosError.response?.data?.message || 'Please try again later.'));
-      // Still close the modal even on error
       setUserToDelete(null);
       setShowDeleteModal(false);
     }
   };
 
   useEffect(() => {
-    // First check if user is an admin or sub-admin
     checkAdminStatus().then(() => {
-      // Then fetch users if they're still on the page
       fetchUsers();
     });
   }, []);
 
-  // Format date to be more readable
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -132,13 +119,11 @@ const Students = () => {
     });
   };
 
-  // Get user name by ID for confirmation modal
   const getUserNameById = (userId: string) => {
     const user = users.find(u => u.id === userId);
     return user ? user.name : 'this user';
   };
-
-  // Loading state
+  
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">

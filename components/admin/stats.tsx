@@ -4,7 +4,6 @@ import { Card } from '../ui/card';
 import { Users, BookOpen, Trophy, TrendingUp, ExternalLink } from 'lucide-react';
 import axios from 'axios';
 
-// Define TypeScript interfaces
 interface StatsDataItem {
   value: string;
 }
@@ -35,12 +34,10 @@ export function Stats() {
       try {
         setLoading(true);
         
-        // Configure axios with credentials
         const axiosConfig = {
           withCredentials: true
         };
         
-        // Fetch all data in parallel
         const [usersResponse, ongoingResponse, upcomingResponse, subAdminsResponse] = await Promise.all([
           axios.get('http://localhost:3000/api/v1/users/', axiosConfig),
           axios.get('http://localhost:3000/api/v1/quiz/ongoing', axiosConfig),
@@ -48,7 +45,6 @@ export function Stats() {
           axios.get('http://localhost:3000/api/v1/admin/sub-admins', axiosConfig)
         ]);
 
-        // Process the responses
         const totalStudents = usersResponse.data.count || usersResponse.data.data.length;
         const ongoingQuizzC = ongoingResponse.data.count || ongoingResponse.data.data.length;
         const upcomingQuizzC = upcomingResponse.data.count || upcomingResponse.data.data.length;
@@ -72,7 +68,6 @@ export function Stats() {
     fetchData();
   }, []);
 
-  // Define stats configuration
   const stats = [
     {
       label: 'Total Students',

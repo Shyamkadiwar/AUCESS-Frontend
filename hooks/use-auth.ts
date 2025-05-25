@@ -12,7 +12,6 @@ export const useAuth = () => {
   const [user, setUser] = useState<DecodedToken | null>(null);
 
   useEffect(() => {
-    // Retrieve token from cookies
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/,
       "$1"
@@ -22,11 +21,9 @@ export const useAuth = () => {
       try {
         const decoded = jwtDecode<DecodedToken>(token);
         
-        // Check if token is expired
         if (decoded.exp * 1000 > Date.now()) {
           setUser(decoded);
         } else {
-          // Token expired, clear user
           setUser(null);
         }
       } catch (error) {

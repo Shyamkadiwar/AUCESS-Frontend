@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { Trophy, Clock, Users, DollarSign, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { Clock, Users, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Link } from '../ui/link';
 
@@ -63,7 +63,6 @@ export function OngoingQuizzes(): JSX.Element {
     setScrollPosition(newPosition);
   };
 
-  // Format date difference as time left
   const getTimeLeft = (endDate: string | null): string => {
     if (!endDate) return "No deadline";
 

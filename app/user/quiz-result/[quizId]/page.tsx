@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/sidebar';
-import { ChevronLeft, Award, CheckCircle, XCircle, Clock, Users, Share2, Loader2 } from 'lucide-react';
+import { ChevronLeft, Award, XCircle, Users, Share2, Loader2 } from 'lucide-react';
 
 interface QuizResult {
   quizId: string;
@@ -22,21 +22,27 @@ interface QuizResult {
   }[];
 }
 
-interface QuestionResult {
-  questionId: string;
-  correct: boolean;
-  correctAnswer: string;
-}
-
-const QuizResult = ({ params }: { params: { quizId: string } }) => {
+export default function QuizResult({ params }: { params: Promise<{ quizId: string }> }) {
   const router = useRouter();
   const [result, setResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [quizId, setQuizId] = useState<string | null>(null);
 
-  const quizId = params?.quizId;
+  useEffect(() => {
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        setQuizId(resolvedParams.quizId);
+      } catch (err) {
+        setError('Failed to load quiz ID');
+        console.error(err);
+      }
+    };
+    
+    resolveParams();
+  }, [params]);
 
-  // Fetch quiz result
   useEffect(() => {
     const fetchQuizResult = async () => {
       try {
@@ -69,7 +75,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     }
   }, [quizId]);
 
-  // Format date
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -81,7 +86,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     });
   };
 
-  // Determine score color
   const getScoreColor = (score: number): string => {
     if (score >= 80) return 'text-green-600';
     if (score >= 60) return 'text-blue-600';
@@ -89,7 +93,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     return 'text-red-600';
   };
 
-  // Determine score background
   const getScoreBg = (score: number): string => {
     if (score >= 80) return 'bg-green-100';
     if (score >= 60) return 'bg-blue-100';
@@ -97,17 +100,14 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     return 'bg-red-100';
   };
 
-  // Back to quiz list
   const handleBackToQuizzes = () => {
     router.push('/user/quizzes');
   };
 
-  // View quiz details
   const handleViewQuizDetails = () => {
     router.push(`/user/quiz/${quizId}`);
   };
 
-  // Share quiz result
   const handleShareResult = () => {
     if (navigator.share) {
       navigator.share({
@@ -122,7 +122,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     }
   };
 
-  // Loading state
   if (loading) {
     return (
       <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
@@ -139,7 +138,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
@@ -163,7 +161,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     );
   }
 
-  // Result not found
   if (!result) {
     return (
       <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
@@ -193,7 +190,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
         <Sidebar />
       </div>
       <main className="md:ml-64 p-4 md:p-8">
-        {/* Header with back button */}
         <div className="mb-6 flex items-center gap-2">
           <button 
             onClick={handleViewQuizDetails}
@@ -203,15 +199,12 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
           </button>
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Quiz Results</h1>
         </div>
-
-        {/* Results summary card */}
         <div className="bg-sky-50 rounded-lg shadow-sm border border-gray-200 mb-8">
           <div className="p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-1">{result.quizTitle}</h2>
             <p className="text-gray-500 mb-6">Completed on {formatDate(result.completedAt)}</p>
             
             <div className="flex flex-col md:flex-row items-center justify-between">
-              {/* Score circle */}
               <div className="flex flex-col items-center mb-6 md:mb-0">
                 <div className={`w-32 h-32 rounded-full flex items-center justify-center ${getScoreBg(result.percentageScore)}`}>
                   <span className={`text-4xl font-bold ${getScoreColor(result.percentageScore)}`}>
@@ -223,7 +216,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
                 </p>
               </div>
               
-              {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-2 gap-4 w-full md:w-auto">
                 <div className="bg-gray-50 p-4 rounded-lg text-center">
                   <Award className="h-6 w-6 text-blue-600 mx-auto mb-2" />
@@ -242,7 +234,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
             </div>
           </div>
           
-          {/* Action buttons */}
           <div className="border-t border-gray-200 p-4 flex flex-wrap gap-2 justify-center md:justify-end">
             <button 
               onClick={handleShareResult}
@@ -260,7 +251,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
           </div>
         </div>
         
-        {/* Leaderboard section */}
         <div className="bg-sky-50 rounded-lg shadow-sm border border-gray-200 mb-8">
           <div className="p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -315,7 +305,6 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
           </div>
         </div>
         
-        {/* Take another quiz button */}
         <div className="flex justify-center">
           <button 
             onClick={handleBackToQuizzes}
@@ -328,5 +317,3 @@ const QuizResult = ({ params }: { params: { quizId: string } }) => {
     </div>
   );
 };
-
-export default QuizResult;

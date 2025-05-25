@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import axios from 'axios';
 import { QuizCard } from '@/components/QuizCard';
 
-// Define interface for Quiz
 export interface Quiz {
   id: string;
   title: string;
@@ -24,7 +23,6 @@ const Quizzes = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch quizzes on component mount
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
@@ -53,7 +51,6 @@ const Quizzes = () => {
     fetchQuizzes();
   }, []);
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">
