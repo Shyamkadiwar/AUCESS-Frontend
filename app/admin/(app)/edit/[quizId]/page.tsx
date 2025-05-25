@@ -64,7 +64,7 @@ const EditQuiz = () => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get<DashboardResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       
@@ -95,7 +95,7 @@ const EditQuiz = () => {
     setIsFetching(true);
     try {
       const response = await axios.get<{success: boolean, data: QuizData}>(
-        `http://localhost:3000/api/v1/quiz/${quizId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}`,
         { withCredentials: true }
       );
       
@@ -188,7 +188,7 @@ const EditQuiz = () => {
       const operation = fileName ? 'replace' : undefined;
       
       const response = await axios.patch(
-        `http://localhost:3000/api/v1/quiz/${quizId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}`,
         {
           title,
           description,

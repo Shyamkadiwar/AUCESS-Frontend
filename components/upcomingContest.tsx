@@ -28,7 +28,7 @@ export function UpcomingQuizzes(): JSX.Element {
     const fetchQuizzes = async (): Promise<void> => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/upcoming', { withCredentials: true });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/upcoming`, { withCredentials: true });
         if (response.data.success) {
           setQuizzes(response.data.data);
         } else {

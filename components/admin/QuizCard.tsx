@@ -19,7 +19,7 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       

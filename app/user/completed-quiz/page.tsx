@@ -29,7 +29,7 @@ const Quizzes = () => {
     const fetchQuizzes = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/user/quizzes/completed', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/user/quizzes/completed`, {
           withCredentials: true
         });
 
@@ -77,7 +77,7 @@ const Quizzes = () => {
 
         {quizzes.length === 0 ? (
           <div className="bg-white shadow-md rounded-lg p-6 text-center">
-            <p className="text-gray-600">No quizzes found. Create your first quiz!</p>
+            <p className="text-gray-600">Join your first quiz!</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

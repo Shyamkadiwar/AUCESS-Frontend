@@ -42,10 +42,10 @@ export function Stats() {
         
         // Fetch all data in parallel
         const [usersResponse, ongoingResponse, upcomingResponse, subAdminsResponse] = await Promise.all([
-          axios.get('http://localhost:3000/api/v1/users/', axiosConfig),
-          axios.get('http://localhost:3000/api/v1/quiz/ongoing', axiosConfig),
-          axios.get('http://localhost:3000/api/v1/quiz/upcoming', axiosConfig),
-          axios.get('http://localhost:3000/api/v1/admin/sub-admins', axiosConfig)
+          axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/`, axiosConfig),
+          axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/ongoing`, axiosConfig),
+          axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/upcoming`, axiosConfig),
+          axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/sub-admins`, axiosConfig)
         ]);
 
         // Process the responses
@@ -79,28 +79,28 @@ export function Stats() {
       value: statsData.students.value,
       icon: Users,
       color: 'text-blue-600',
-      link: 'http://localhost:3001/admin/students/'
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/admin/students/`
     },
     {
       label: 'Active Quizzes',
       value: statsData.quizzes.value,
       icon: Trophy,
       color: 'text-green-600',
-      link: 'http://localhost:3001/admin/quiz/'
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/admin/quiz/`
     },
     {
       label: 'Upcoming Quizzes',
       value: statsData.questions.value,
       icon: BookOpen,
       color: 'text-purple-600',
-      link: 'http://localhost:3001/admin/quizzes'
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/admin/quizzes`
     },
     {
       label: 'Sub Admins',
       value: statsData.subAdmins.value,
       icon: TrendingUp,
       color: 'text-orange-600',
-      link: 'http://localhost:3001/admin/sub-admin'
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/admin/sub-admin`
     },
   ];
 

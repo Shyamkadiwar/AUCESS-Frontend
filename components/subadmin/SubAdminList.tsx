@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react';
-import { Trash2, Eye, EyeOff } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import axios from 'axios';
 import { SubAdmin } from './types';
 
@@ -27,7 +27,7 @@ const SubAdminList: React.FC<SubAdminListProps> = ({ subAdmins, isAdmin, onRefre
       setDeletingId(id);
       try {
         // Updated to use the correct endpoint for deleting sub-admins
-        const response = await axios.delete(`http://localhost:3000/api/v1/admin/sub-admin/${id}`, {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/sub-admin/${id}`, {
           withCredentials: true
         });
         

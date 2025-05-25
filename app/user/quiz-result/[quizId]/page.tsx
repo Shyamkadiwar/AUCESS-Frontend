@@ -1,9 +1,9 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Sidebar } from '@/components/sidebar';
-import { ChevronLeft, Award, CheckCircle, XCircle, Clock, Users, Share2, Loader2 } from 'lucide-react';
+import { ChevronLeft, Award, XCircle, Users, Share2, Loader2 } from 'lucide-react';
 
 interface QuizResult {
   quizId: string;
@@ -28,20 +28,20 @@ interface QuestionResult {
   correctAnswer: string;
 }
 
-const QuizResult = ({ params }: { params: { quizId: string } }) => {
+const QuizResult = ({ params }: { params: Promise<{ quizId: string }> }) => {
   const router = useRouter();
   const [result, setResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const quizId = params?.quizId;
+  const {quizId} = use(params);
 
   // Fetch quiz result
   useEffect(() => {
     const fetchQuizResult = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:3000/api/v1/quiz/${quizId}/result`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}/result`, {
           withCredentials: true
         });
 

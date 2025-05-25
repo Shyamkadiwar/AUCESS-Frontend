@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { use } from 'react'
 import { Sidebar } from '@/components/admin/sidebar';
 import { Calendar, Clock, Users, Award, FileText, Edit, Trash2, AlertCircle } from 'lucide-react';
 import { Link } from '@/components/ui/link';
@@ -81,7 +82,7 @@ interface PageParams {
   quizId: string;
 }
 
-const Quiz = ({ params }: { params: PageParams }) => {
+const Quiz = ({ params }: { params: Promise<PageParams> }) => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -92,13 +93,13 @@ const Quiz = ({ params }: { params: PageParams }) => {
   const [showUsers, setShowUsers] = useState<boolean>(false);
   
   const router = useRouter();
-  const quizId = params?.quizId;
+  const {quizId} = use(params)
 
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:3000/api/v1/quiz/${quizId}`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -132,7 +133,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
   const fetchQuizUsers = async () => {
     try {
       setLoadingUsers(true);
-      const response = await axios.get(`http://localhost:3000/api/v1/quiz/${quizId}/users`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}/users`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -162,7 +163,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
   const handleDeleteQuiz = async () => {
     try {
       setIsDeleting(true);
-      const response = await axios.delete(`http://localhost:3000/api/v1/quiz/${quizId}`, {
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}`, {
         headers: {
           'Content-Type': 'application/json',
         },

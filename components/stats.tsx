@@ -35,9 +35,9 @@ export function Stats() {
         
         // Fetch all data in parallel
         const [completedResponse, ongoingResponse, upcomingResponse] = await Promise.all([
-          axios.get('http://localhost:3000/api/v1/quiz/user/quizzes/completed', axiosConfig),
-          axios.get('http://localhost:3000/api/v1/quiz/ongoing', axiosConfig),
-          axios.get('http://localhost:3000/api/v1/quiz/upcoming', axiosConfig)
+          axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/user/quizzes/completed`, axiosConfig),
+          axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/ongoing`, axiosConfig),
+          axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/upcoming`, axiosConfig)
         ]);
 
         // Process the responses
@@ -69,21 +69,21 @@ export function Stats() {
       value: statsData.completedQuizzes.value,
       icon: CheckCircle,
       color: 'text-blue-600',
-      link: 'http://localhost:3001/user/completed-quiz/'
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/user/completed-quiz/`
     },
     {
       label: 'Active Quizzes',
       value: statsData.activeQuizzes.value,
       icon: Trophy,
       color: 'text-green-600',
-      link: 'http://localhost:3001/user/quizzes/'
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/user/quizzes/`
     },
     {
       label: 'Upcoming Quizzes',
       value: statsData.upcomingQuizzes.value,
       icon: BookOpen,
       color: 'text-purple-600',
-      link: 'http://localhost:3001/user/dashboard'
+      link: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/user/dashboard`
     },
   ];
 

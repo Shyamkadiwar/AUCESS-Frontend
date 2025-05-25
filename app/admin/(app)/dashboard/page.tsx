@@ -2,7 +2,6 @@
 import { OngoingQuizzes } from '@/components/admin/onGoingContest';
 import { UpcomingQuizzes } from '@/components/admin/upcomingContest';
 import { Stats } from '@/components/admin/stats';
-import { Bell } from 'lucide-react';
 import { Sidebar } from '@/components/admin/sidebar';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -60,7 +59,7 @@ const DashboardComponent = () => {
       try {
         setIsLoading(true);
         
-        const response = await axios.get('http://localhost:3000/api/v1/admin/admin-profile', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/admin-profile`, {
           withCredentials: true
         });
         

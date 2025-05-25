@@ -38,7 +38,7 @@ const CreateQuiz = () => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get<DashboardResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       
@@ -125,7 +125,7 @@ const CreateQuiz = () => {
   
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/v1/quiz/create-quiz', 
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/create-quiz`, 
         {
           title,
           description,
@@ -151,6 +151,7 @@ const CreateQuiz = () => {
         setEndDate('');
         setQuestions([]);
         setFileName('');
+        router.push('/admin/dashboard')
       } else {
         toast.error(response.data.message || 'Failed to create quiz');
       }

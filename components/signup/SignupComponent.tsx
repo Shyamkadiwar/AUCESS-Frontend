@@ -30,7 +30,7 @@ const SignUpComponent = () => {
 
   const handleGoogleSignUp = () => {
     setLoading(true);
-    window.location.href = "http://localhost:3000/api/v1/auth/google/dashboard";
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/google/dashboard`;
   }
 
   const validateInputs = () => {
@@ -56,7 +56,7 @@ const SignUpComponent = () => {
       setLoading(true);
       setError(null);
       
-      const response = await axios.post('http://localhost:3000/api/v1/auth/signup', {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/signup`, {
         name,
         email,
         password,

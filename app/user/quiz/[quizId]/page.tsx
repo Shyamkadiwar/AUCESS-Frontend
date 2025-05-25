@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { Sidebar } from '@/components/sidebar';
 import { Calendar, Clock, Users, Award, FileText } from 'lucide-react';
@@ -67,24 +67,24 @@ interface PageParams {
   quizId: string;
 }
 
-const Quiz = ({ params }: { params: PageParams }) => {
+const Quiz = ({ params }: { params: Promise<PageParams> }) => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [joinError, setJoinError] = useState<string | null>(null);
+  const [alreadyJoined , setAlreadyJoined] = useState<boolean>(false);
   const [joinQuiz, setJoiningQuiz] = useState<boolean>(false);
   const [hasJoined, setHasJoined] = useState<boolean>(false);
   const [quizStatus, setQuizStatus] = useState<'upcoming' | 'ongoing' | 'completed' | null>(null);
 
-  // Extract quizId from URL if using app router
-  const quizId = params?.quizId;
+  const { quizId } = use(params) ;
 
   const handleJoin = async () => {
     setJoiningQuiz(true);
     setJoinError(null);
     
     try {
-      const response = await axios.post(`http://localhost:3000/api/v1/quiz/${quizId}/join`, {}, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}/join`, {}, {
         withCredentials: true
       });
       
@@ -134,7 +134,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
     const fetchQuiz = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:3000/api/v1/quiz/${quizId}`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -150,7 +150,7 @@ const Quiz = ({ params }: { params: PageParams }) => {
         
         // Check if user has already joined
         try {
-          const joinedQuizzes = await axios.get(`http://localhost:3000/api/v1/quiz/user/joined`, {
+          const joinedQuizzes = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/user/joined`, {
             withCredentials: true,
           });
           

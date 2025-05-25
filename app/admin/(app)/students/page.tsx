@@ -40,7 +40,7 @@ const Students = () => {
   const fetchUsers = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get<ApiResponse>('http://localhost:3000/api/v1/users/', {
+      const response = await axios.get<ApiResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/`, {
         withCredentials: true
       });
       
@@ -58,7 +58,7 @@ const Students = () => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get<DashboardResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       
@@ -93,7 +93,7 @@ const Students = () => {
     if (!userToDelete) return;
     
     try {
-      const response = await axios.delete(`http://localhost:3000/api/v1/admin/delete-user/${userToDelete}`, {
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/delete-user/${userToDelete}`, {
         withCredentials: true
       });
       

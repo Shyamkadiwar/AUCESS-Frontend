@@ -29,7 +29,7 @@ export function OngoingQuizzes(): JSX.Element {
     const fetchQuizzes = async (): Promise<void> => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/ongoing', { withCredentials: true });
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/ongoing`, { withCredentials: true });
         if (response.data.success) {
           setQuizzes(response.data.data);
         } else {

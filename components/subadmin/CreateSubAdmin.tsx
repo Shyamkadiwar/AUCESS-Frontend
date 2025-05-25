@@ -36,7 +36,7 @@ const CreateSubAdminForm: React.FC<CreateSubAdminFormProps> = ({ onSuccess }) =>
         setError('');
 
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/admin/create-sub-admin', formData, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/create-sub-admin`, formData, {
                 withCredentials: true // Important for sending cookies with the request
             });
 

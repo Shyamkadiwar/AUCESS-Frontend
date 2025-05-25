@@ -14,7 +14,7 @@ export function Sidebar() {
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
-      const response = await axios.post('http://localhost:3000/api/v1/admin/logout', {}, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/logout`, {}, {
         withCredentials: true
       });
       

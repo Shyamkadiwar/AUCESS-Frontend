@@ -1,7 +1,7 @@
 "use client"
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import axios from 'axios';
-import { ArrowLeft, Clock, AlertCircle, CheckCircle, Loader2, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Clock, AlertCircle, Loader2, AlertTriangle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // Define interfaces for type safety
@@ -24,7 +24,7 @@ interface Quiz {
   questions: QuizQuestion[];
 }
 
-const QuizTaking = ({ params }: { params: { quizId: string } }) => {
+const QuizTaking = ({ params }: { params: Promise<{ quizId: string }> }) => {
   const router = useRouter();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   const maxTabSwitches = 3;
   const fullscreenRef = useRef<HTMLDivElement>(null);
 
-  const quizId = params?.quizId;
+  const {quizId} = use(params);
 
   // Request fullscreen mode
   const enterFullscreen = () => {
@@ -115,7 +115,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     const fetchQuizQuestions = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:3000/api/v1/quiz/${quizId}/take`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}/take`, {
           withCredentials: true
         });
 
@@ -215,7 +215,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
 
     try {
       setIsSubmitting(true);
-      const response = await axios.post(`http://localhost:3000/api/v1/quiz/${quizId}/submit`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}/submit`, {
         answers: answersArray
       }, {
         withCredentials: true

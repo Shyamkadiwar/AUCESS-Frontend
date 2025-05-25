@@ -39,7 +39,7 @@ const DashboardComponent = () => {
     const fetchUserProfile = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get<ApiResponse>('http://localhost:3000/api/v1/auth/profile', {
+        const response = await axios.get<ApiResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/profile`, {
           withCredentials: true
         });
 

@@ -32,7 +32,7 @@ const Quizzes = () => {
     const fetchQuizzes = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/upcoming', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/upcoming`, {
           withCredentials: true
         });
 

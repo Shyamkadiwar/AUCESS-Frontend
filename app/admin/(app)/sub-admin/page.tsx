@@ -24,7 +24,7 @@ const SubAdminPage = () => {
     
     try {
       // Fetch sub-admin list from the correct API endpoint
-      const response = await axios.get('http://localhost:3000/api/v1/admin/sub-admins', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/sub-admins`, {
         withCredentials: true // Important for sending cookies with the request
       });
       
@@ -54,7 +54,7 @@ const SubAdminPage = () => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       
