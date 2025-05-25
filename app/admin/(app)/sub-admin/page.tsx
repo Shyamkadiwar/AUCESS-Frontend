@@ -5,7 +5,7 @@ import { Sidebar } from '@/components/admin/sidebar';
 import axios from 'axios';
 import CreateSubAdminForm from '@/components/subadmin/CreateSubAdmin';
 import SubAdminList from '@/components/subadmin/SubAdminList';
-import { SubAdmin, ApiResponse } from '@/components/subadmin/types';
+import { SubAdmin } from '@/components/subadmin/types';
 import { useRouter } from 'next/navigation';
 import { ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -23,14 +23,12 @@ const SubAdminPage = () => {
     setError('');
     
     try {
-      // Fetch sub-admin list from the correct API endpoint
       const response = await axios.get('http://localhost:3000/api/v1/admin/sub-admins', {
-        withCredentials: true // Important for sending cookies with the request
+        withCredentials: true
       });
       
       if (response.data && response.data.success) {
         setSubAdmins(response.data.subAdmins || []);
-        // If we can fetch sub-admins, user must have admin access
         setIsAdmin(true);
       } else {
         setError(response.data?.message || 'Failed to fetch sub-admins');
@@ -38,7 +36,6 @@ const SubAdminPage = () => {
     } catch (err: any) {
       console.error('Error fetching sub-admins:', err);
       if (err.response?.status === 401 || err.response?.status === 403) {
-        // If unauthorized, don't redirect but mark as not admin
         setIsAdmin(false);
         setIsAuthenticated(false);
         setError('You do not have permission to access this page');
@@ -50,21 +47,17 @@ const SubAdminPage = () => {
     }
   };
 
-  // Fetch user's role to determine if they're an admin
   const checkAdminStatus = async () => {
     try {
-      // Use the dashboard endpoint to check if user is authenticated and their role
       const response = await axios.get('http://localhost:3000/api/v1/admin/dashboard', {
         withCredentials: true
       });
       
       if (response.data && response.data.user) {
-        // Set admin status based on user role
         const isUserAdmin = response.data.user.role === 'ADMIN';
         setIsAdmin(isUserAdmin);
         setIsAuthenticated(true);
         
-        // If not admin, we'll show access denied message instead of redirecting
         if (!isUserAdmin) {
           setError('Access denied. Only administrators can manage sub-admins.');
         }
@@ -72,7 +65,6 @@ const SubAdminPage = () => {
     } catch (err: any) {
       console.error('Authentication error:', err);
       if (err.response?.status === 401 || err.response?.status === 403) {
-        // If unauthorized, don't redirect but mark as not authenticated
         setIsAuthenticated(false);
         setError('Authentication failed. Please login to continue.');
       }
@@ -82,16 +74,12 @@ const SubAdminPage = () => {
   };
 
   useEffect(() => {
-    // First check if user is an admin
     checkAdminStatus().then(() => {
-      // Then fetch sub-admins if they're admin
       if (isAdmin) {
         fetchSubAdmins();
       }
     });
   }, [isAdmin]);
-
-  // Loading state
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">
@@ -100,7 +88,6 @@ const SubAdminPage = () => {
     );
   }
 
-  // Access denied state (when authenticated but not admin, or not authenticated)
   if (!isAdmin) {
     return (
       <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">

@@ -4,7 +4,6 @@ import axios from 'axios';
 import { ArrowLeft, Clock, AlertCircle, CheckCircle, Loader2, AlertTriangle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-// Define interfaces for type safety
 interface QuizOption {
   id: string;
   text: string;
@@ -24,7 +23,7 @@ interface Quiz {
   questions: QuizQuestion[];
 }
 
-const QuizTaking = ({ params }: { params: { quizId: string } }) => {
+export default function QuizTaking({ params }: { params: Promise<{ quizId: string }> }) {
   const router = useRouter();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,10 +38,22 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   const [showFullscreenWarning, setShowFullscreenWarning] = useState(true);
   const maxTabSwitches = 3;
   const fullscreenRef = useRef<HTMLDivElement>(null);
+  const [quizId, setQuizId] = useState<string | null>(null);
 
-  const quizId = params?.quizId;
+  useEffect(() => {
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        setQuizId(resolvedParams.quizId);
+      } catch (err) {
+        setError('Failed to load quiz ID');
+        console.error(err);
+      }
+    };
+    
+    resolveParams();
+  }, [params]);
 
-  // Request fullscreen mode
   const enterFullscreen = () => {
     if (fullscreenRef.current) {
       if (fullscreenRef.current.requestFullscreen) {
@@ -56,7 +67,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     }
   };
 
-  // Handle fullscreen change events
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -78,7 +88,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     };
   }, []);
 
-  // Monitor visibility change for tab switches
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
@@ -93,24 +102,20 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     };
   }, [tabSwitchCount]);
 
-  // Handle tab switch counter
   const handleTabSwitch = () => {
     const newCount = tabSwitchCount + 1;
     setTabSwitchCount(newCount);
     
     if (newCount >= maxTabSwitches) {
-      // Auto-submit when max tab switches reached
       handleSubmitQuiz();
     }
   };
 
-  // Start fullscreen and dismiss warning
   const startQuiz = () => {
     setShowFullscreenWarning(false);
     enterFullscreen();
   };
 
-  // Fetch quiz questions
   useEffect(() => {
     const fetchQuizQuestions = async () => {
       try {
@@ -121,7 +126,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
 
         if (response.data.success) {
           setQuiz(response.data.data);
-          // Initialize timer if quiz has time limit
           if (response.data.data.timeLimit) {
             setTimeLeft(response.data.data.timeLimit);
           }
@@ -147,18 +151,14 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     }
   }, [quizId]);
 
-  // Timer functionality
   useEffect(() => {
     const timer = setInterval(() => {
-      // Increment elapsed time
       setTimeElapsed(prev => prev + 1);
       
-      // Decrement time left if there's a time limit
       if (timeLeft !== null) {
         setTimeLeft(prev => {
           if (prev !== null && prev <= 1) {
             clearInterval(timer);
-            // Auto-submit when time is up
             handleSubmitQuiz();
             return 0;
           }
@@ -170,15 +170,12 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  // Format time as MM:SS
   const formatTime = (seconds: number | null): string => {
     if (seconds === null) return '--:--';
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
-
-  // Handle answer selection
   const handleAnswerSelect = (questionId: string, optionId: string) => {
     setAnswers(prev => ({
       ...prev,
@@ -186,31 +183,26 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     }));
   };
 
-  // Navigate to next question
   const handleNextQuestion = () => {
     if (quiz && currentQuestion < quiz.questions.length - 1) {
       setCurrentQuestion(prev => prev + 1);
     }
   };
 
-  // Navigate to previous question
   const handlePrevQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(prev => prev - 1);
     }
   };
 
-  // Submit quiz answers
   const handleSubmitQuiz = async () => {
     if (!quiz) return;
 
-    // Prepare answers in required format
     const answersArray = Object.entries(answers).map(([questionId, answerId]) => ({
       questionId,
       answerId
     }));
 
-    // Debug logging
     console.log("Submitting answers:", answersArray);
 
     try {
@@ -225,12 +217,10 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
         console.log("Quiz submission successful:", response.data);
         console.log(answers);
         
-        // Exit fullscreen before redirecting
         if (document.fullscreenElement) {
           document.exitFullscreen().catch(err => console.error(err));
         }
         
-        // Redirect to result page
         router.push(`/user/quiz-result/${quizId}`);
       } else {
         setError(response.data.message);
@@ -249,13 +239,11 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     }
   };
 
-  // Check if all questions are answered
   const allQuestionsAnswered = () => {
     if (!quiz) return false;
     return quiz.questions.every(q => answers[q.id]);
   };
 
-  // Loading state
   if (loading) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
@@ -267,7 +255,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="h-screen w-full text-black flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
@@ -286,7 +273,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     );
   }
 
-  // If quiz not loaded
   if (!quiz) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
@@ -305,7 +291,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     );
   }
 
-  // Fullscreen warning state
   if (showFullscreenWarning) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
@@ -336,7 +321,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
 
   return (
     <div ref={fullscreenRef} className="h-screen w-full flex flex-col bg-gradient-to-br from-blue-200 to-blue-300">
-      {/* Quiz header */}
       <header className="bg-sky-50 shadow-sm p-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <button 
@@ -368,16 +352,13 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
         </div>
       </header>
 
-      {/* Quiz content */}
       <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6">
         <div className="max-w-3xl mx-auto">
-          {/* Question */}
           <div className="bg-sky-50 rounded-lg shadow-sm p-6 mb-6">
             <h2 className="text-xl font-medium text-gray-800 mb-6">
               {currentQuestionData.text}
             </h2>
             
-            {/* Options */}
             <div className="space-y-3">
               {currentQuestionData.options.map((option) => (
                 <label 
@@ -404,7 +385,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
         </div>
       </div>
 
-      {/* Quiz navigation */}
       <footer className="bg-sky-50 shadow-sm p-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <button
@@ -419,7 +399,6 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
             Previous
           </button>
           
-          {/* Tab switch counter */}
           <div className={`ml-4 px-3 py-1 rounded-full text-sm font-medium ${
             tabSwitchCount >= maxTabSwitches - 1 ? 'bg-red-100 text-red-800' : 
             tabSwitchCount >= maxTabSwitches - 2 ? 'bg-amber-100 text-amber-800' : 
@@ -471,5 +450,3 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     </div>
   );
 };
-
-export default QuizTaking;

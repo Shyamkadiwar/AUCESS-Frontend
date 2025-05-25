@@ -27,7 +27,6 @@ const Quizzes = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch quizzes on component mount
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
@@ -56,7 +55,6 @@ const Quizzes = () => {
     fetchQuizzes();
   }, []);
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">

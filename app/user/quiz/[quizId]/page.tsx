@@ -63,11 +63,7 @@ interface Quiz {
   status?: 'upcoming' | 'ongoing' | 'completed';
 }
 
-interface PageParams {
-  quizId: string;
-}
-
-const Quiz = ({ params }: { params: PageParams }) => {
+export default function Quiz({ params }: { params: Promise<{ quizId: string }> }) {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -75,9 +71,22 @@ const Quiz = ({ params }: { params: PageParams }) => {
   const [joinQuiz, setJoiningQuiz] = useState<boolean>(false);
   const [hasJoined, setHasJoined] = useState<boolean>(false);
   const [quizStatus, setQuizStatus] = useState<'upcoming' | 'ongoing' | 'completed' | null>(null);
+  const [quizId, setQuizId] = useState<string | null>(null);
 
-  // Extract quizId from URL if using app router
-  const quizId = params?.quizId;
+  useEffect(() => {
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        setQuizId(resolvedParams.quizId);
+      } catch (err) {
+        setError('Failed to load quiz ID');
+        console.error(err);
+      }
+    };
+    
+    resolveParams();
+  }, [params]);
+
 
   const handleJoin = async () => {
     setJoiningQuiz(true);
@@ -101,12 +110,11 @@ const Quiz = ({ params }: { params: PageParams }) => {
     }
   };
   
-  // Determine quiz status based on dates
   const determineQuizStatus = (quiz: Quiz): 'upcoming' | 'ongoing' | 'completed' => {
     if (quiz.status) return quiz.status;
     
     const currentDate = new Date();
-    let status: 'upcoming' | 'ongoing' | 'completed' = 'ongoing'; // Default
+    let status: 'upcoming' | 'ongoing' | 'completed' = 'ongoing';
     
     if (quiz.startDate && quiz.endDate) {
       const startDate = new Date(quiz.startDate);
@@ -148,7 +156,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
         const quizData = response.data.data as Quiz;
         setQuiz(quizData);
         
-        // Check if user has already joined
         try {
           const joinedQuizzes = await axios.get(`http://localhost:3000/api/v1/quiz/user/joined`, {
             withCredentials: true,
@@ -164,7 +171,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
           console.error('Error checking joined status:', joinError);
         }
         
-        // Set quiz status
         setQuizStatus(determineQuizStatus(quizData));
       } catch (err) {
         console.error('Error fetching quiz:', err);
@@ -202,7 +208,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
   };
 
   const renderQuizActionButtons = () => {
-    // Show "Show Results" button for completed quizzes
     if (quizStatus === 'completed') {
       return (
         <div className="flex gap-2 w-full justify-center items-center">
@@ -215,8 +220,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
         </div>
       );
     }
-    
-    // Show message for upcoming quizzes
     if (quizStatus === 'upcoming') {
       return (
         <div className="bg-gray-100 p-4 rounded-md text-center">
@@ -225,7 +228,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
       );
     }
     
-    // For ongoing quizzes, show join/start buttons
     return (
       <div className="flex gap-2 w-full justify-center items-center">
         {!hasJoined ? (
@@ -335,7 +337,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
           </div>
         </div>
 
-        {/* Quiz details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center gap-3 mb-4">
@@ -437,11 +438,8 @@ const Quiz = ({ params }: { params: PageParams }) => {
           </div>
         </div>
         
-        {/* Quiz action buttons */}
         {renderQuizActionButtons()}
       </main>
     </div>
   );
 }
-
-export default Quiz;

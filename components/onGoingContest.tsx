@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from './ui/card';
-import { Trophy, Clock, Users, DollarSign, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { Clock, Users, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import { Link } from './ui/link';
 
 interface Quiz {
@@ -63,7 +63,6 @@ export function OngoingQuizzes(): JSX.Element {
     setScrollPosition(newPosition);
   };
 
-  // Format date difference as time left
   const getTimeLeft = (endDate: string | null): string => {
     if (!endDate) return "No deadline";
 

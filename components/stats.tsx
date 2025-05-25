@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { CheckCircle, BookOpen, Trophy, TrendingUp, ExternalLink } from 'lucide-react';
+import { CheckCircle, BookOpen, Trophy, ExternalLink } from 'lucide-react';
 import axios from 'axios';
 import { Card } from './ui/card';
 
@@ -28,19 +28,16 @@ export function Stats() {
       try {
         setLoading(true);
         
-        // Configure axios with credentials
         const axiosConfig = {
           withCredentials: true
         };
         
-        // Fetch all data in parallel
         const [completedResponse, ongoingResponse, upcomingResponse] = await Promise.all([
           axios.get('http://localhost:3000/api/v1/quiz/user/quizzes/completed', axiosConfig),
           axios.get('http://localhost:3000/api/v1/quiz/ongoing', axiosConfig),
           axios.get('http://localhost:3000/api/v1/quiz/upcoming', axiosConfig)
         ]);
 
-        // Process the responses
         const completedQuizzes = completedResponse.data.count || completedResponse.data.data.length;
         const ongoingQuizzes = ongoingResponse.data.count || ongoingResponse.data.data.length;
         const upcomingQuizzes = upcomingResponse.data.count || upcomingResponse.data.data.length;
@@ -62,7 +59,6 @@ export function Stats() {
     fetchData();
   }, []);
 
-  // Define stats configuration
   const stats = [
     {
       label: 'Quiz Attempted',

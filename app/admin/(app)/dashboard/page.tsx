@@ -2,13 +2,11 @@
 import { OngoingQuizzes } from '@/components/admin/onGoingContest';
 import { UpcomingQuizzes } from '@/components/admin/upcomingContest';
 import { Stats } from '@/components/admin/stats';
-import { Bell } from 'lucide-react';
 import { Sidebar } from '@/components/admin/sidebar';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import axios from 'axios';
 
-// Define types for admin data
 type AdminProfile = {
   id: string;
   email: string;
@@ -67,15 +65,12 @@ const DashboardComponent = () => {
         if (response.data && response.data.success) {
           const profile = response.data.admin;
           
-          // Store the complete admin data
           setAdminData(profile);
           
-          // Set admin name
           if (profile.name) {
             setAdminName(profile.name);
           }
           
-          // Set role and admin status
           if (profile.role) {
             setRole(profile.role);
             setIsAdmin(profile.role === 'ADMIN');
@@ -94,7 +89,6 @@ const DashboardComponent = () => {
     fetchAdminProfile();
   }, []);
 
-  // Generate appropriate welcome message based on role
   const getWelcomeMessage = () => {
     if (role === 'ADMIN') {
       return `Welcome back, Admin ${adminName}!`;

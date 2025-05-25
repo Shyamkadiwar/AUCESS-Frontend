@@ -77,11 +77,8 @@ interface QuizAttempt {
   };
 }
 
-interface PageParams {
-  quizId: string;
-}
 
-const Quiz = ({ params }: { params: PageParams }) => {
+export default function Quiz({ params }: { params: Promise<{ quizId: string }> }) {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -90,9 +87,22 @@ const Quiz = ({ params }: { params: PageParams }) => {
   const [quizUsers, setQuizUsers] = useState<QuizAttempt[]>([]);
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
   const [showUsers, setShowUsers] = useState<boolean>(false);
+  const [quizId, setQuizId] = useState<string | null>(null);
   
   const router = useRouter();
-  const quizId = params?.quizId;
+  useEffect(() => {
+    const resolveParams = async () => {
+      try {
+        const resolvedParams = await params;
+        setQuizId(resolvedParams.quizId);
+      } catch (err) {
+        setError('Failed to load quiz ID');
+        console.error(err);
+      }
+    };
+    
+    resolveParams();
+  }, [params]);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -173,7 +183,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
         throw new Error(response.data.message || 'Failed to delete quiz');
       }
 
-      // Redirect to quizzes page after successful deletion
       router.push('/admin/quizzes');
       
     } catch (err) {
@@ -297,7 +306,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
           </div>
         </div>
 
-        {/* Delete Confirmation Modal */}
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-sky-50 rounded-lg p-6 w-full max-w-md">
@@ -328,7 +336,6 @@ const Quiz = ({ params }: { params: PageParams }) => {
           </div>
         )}
 
-        {/* Quiz details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center gap-3 mb-4">
@@ -518,5 +525,3 @@ const Quiz = ({ params }: { params: PageParams }) => {
     </div>
   );
 }
-
-export default Quiz;

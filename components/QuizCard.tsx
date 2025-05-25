@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const router = useRouter();
 
-  // Format date to display month and day
   const formatDate = (dateString: string | null) => {
     if (!dateString) return 'Not set';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -17,13 +16,11 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
     });
   };
 
-  // Calculate quiz status and appropriate message
   const getQuizStatusInfo = () => {
     const now = new Date();
     const startDate = quiz.startDate ? new Date(quiz.startDate) : null;
     const endDate = quiz.endDate ? new Date(quiz.endDate) : null;
 
-    // Quiz is upcoming if start date is in the future
     if (startDate && startDate > now) {
       const diffTime = Math.abs(startDate.getTime() - now.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -36,7 +33,6 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
       };
     }
     
-    // Quiz is completed if end date is in the past
     if (endDate && endDate < now) {
       return {
         status: 'completed',
@@ -46,8 +42,6 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
       };
     }
     
-    // Otherwise, quiz is ongoing
-    // Calculate time remaining if there's an end date
     if (endDate) {
       const diffTime = Math.abs(endDate.getTime() - now.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -60,7 +54,6 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
       };
     }
     
-    // Ongoing with no end date
     return {
       status: 'ongoing',
       statusText: '',
