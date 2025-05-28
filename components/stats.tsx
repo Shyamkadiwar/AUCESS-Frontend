@@ -1,8 +1,9 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { CheckCircle, BookOpen, Trophy, TrendingUp, ExternalLink } from 'lucide-react';
+import { CheckCircle, BookOpen, Trophy, ExternalLink } from 'lucide-react';
 import axios from 'axios';
 import { Card } from './ui/card';
+import Link from 'next/link';
 
 interface StatsDataItem {
   value: string;
@@ -27,12 +28,12 @@ export function Stats() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Configure axios with credentials
         const axiosConfig = {
           withCredentials: true
         };
-        
+
         // Fetch all data in parallel
         const [completedResponse, ongoingResponse, upcomingResponse] = await Promise.all([
           axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/user/quizzes/completed`, axiosConfig),
@@ -50,7 +51,7 @@ export function Stats() {
           activeQuizzes: { value: ongoingQuizzes.toLocaleString() },
           upcomingQuizzes: { value: upcomingQuizzes.toLocaleString() }
         });
-        
+
         setLoading(false);
       } catch (err) {
         console.error("Error fetching stats data:", err);
@@ -92,27 +93,26 @@ export function Stats() {
   }
 
   return (
-    <div className="flex flex-col w-full justify-between lg:flex-row gap-6 mb-8">
+    <div className="flex flex-col w-full justify-between pb-8 border-b border- lg:flex-row gap-6 mb-8">
       {stats.map((stat) => (
-        <Card key={stat.label} className="w-full flex flex-col p-4 relative bg-sky-50">
-          <div className="flex items-start w-full justify-between">
-            <div>
-              <p className="text-gray-600 text-sm">{stat.label}</p>
-              <p className="text-2xl font-semibold text-black mt-1">
-                {loading ? '...' : stat.value}
-              </p>
+        <Link
+          key={stat.label}
+          href={stat.link}
+          rel="noopener noreferrer"
+          className='w-full'
+        >
+          <Card className="w-full flex flex-col p-4 relative bg-white dark:bg-[#18181a]">
+            <div className="flex items-start w-full justify-between">
+              <div>
+                <h2 className="text-gray-600 dark:text-white/90">{stat.label}</h2>
+                <p className="text-2xl font-semibold text-black dark:text-white/90 mt-2">
+                  {loading ? '...' : stat.value}
+                </p>
+              </div>
+              <stat.icon className={`w-6 h-6 text-[#86caf3]`} />
             </div>
-            <stat.icon className={`w-8 h-8 ${stat.color}`} />
-          </div>
-          <a 
-            href={stat.link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="absolute top-2 right-2 text-gray-400 hover:text-gray-700"
-          >
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        </Card>
+          </Card>
+        </Link>
       ))}
     </div>
   );

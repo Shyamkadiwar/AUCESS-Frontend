@@ -106,19 +106,19 @@ export function UpcomingQuizzes(): JSX.Element {
   return (
     <div className="mb-8 relative">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">Upcoming Quizzes</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white/90">Upcoming Quizzes</h2>
         {quizzes.length > 1 && (
           <div className="flex gap-2">
             <button
               onClick={() => handleScroll('left')}
-              className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-neutral-400 dark:hover:bg-neutral-500 transition-colors"
               aria-label="Scroll left"
             >
               <ChevronLeft className="w-5 h-5 text-black" />
             </button>
             <button
               onClick={() => handleScroll('right')}
-              className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-neutral-400 dark:hover:bg-neutral-500 transition-colors"
               aria-label="Scroll right"
             >
               <ChevronRight className="w-5 h-5 text-black" />

@@ -72,7 +72,7 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const quizStatus = getQuizStatusInfo();
 
   return (
-    <div className="bg-sky-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <div className="bg-[#18181a] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div className="flex flex-col">
