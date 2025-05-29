@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from './ui/card';
-import { Trophy, Clock, Users, DollarSign, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import { Clock, Users, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import { Link } from './ui/link';
 
 interface Quiz {
@@ -137,7 +137,7 @@ export function OngoingQuizzes(): JSX.Element {
           quizzes.map((quiz) => (
             <Card
               key={quiz.id}
-              className="flex-shrink-0 w-[30rem] bg-[#18181a]"
+              className="flex-shrink-0 w-[30rem] bg-slate-200  dark:bg-[#18181a]"
             >
               <div className="p-3">
                 <div className="flex flex-col h-full">
@@ -152,11 +152,11 @@ export function OngoingQuizzes(): JSX.Element {
 
                   <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-neutral-400 mb-3">
                     <div className="flex items-center gap-1">
-                      <Users className="w-4 h-4" />
+                      <Users className="w-4 h-4 text-[#86caf3]" />
                       Total Participants : {quiz.totalParticipants}
                     </div>
                     <div className="flex items-center gap-1">
-                      <BookOpen className="w-4 h-4" />
+                      <BookOpen className="w-4 h-4 text-[#86caf3]" />
                       {quiz.totalQuestions === 1 ?  "Question" : "Questions"} : {quiz.totalQuestions}
                     </div>
                   </div>

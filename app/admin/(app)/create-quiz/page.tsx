@@ -14,6 +14,7 @@ interface QuizQuestion {
   text: string;
   correctAnswer: string;
   options: { text: string }[];
+  category: string;
 }
 
 interface DashboardResponse {
@@ -90,7 +91,8 @@ const CreateQuiz = () => {
           { text: row['Option 2'] },
           { text: row['Option 3'] },
           { text: row['Option 4'] }
-        ]
+        ],
+        category: row['category']
       }));
 
       setQuestions(parsedQuestions);
@@ -171,8 +173,8 @@ const CreateQuiz = () => {
 
   const downloadExcelTemplate = () => {
     const worksheet = XLSX.utils.aoa_to_sheet([
-      ['Question Text', 'Correct Answer', 'Option 1', 'Option 2', 'Option 3', 'Option 4'],
-      ['Sample Question', 'Correct Option', 'Option A', 'Option B', 'Option C', 'Option D']
+      ['Question Text', 'Correct Answer', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'category'],
+      ['Sample Question', 'Correct Option', 'Option A', 'Option B', 'Option C', 'Option D', 'IT (use capital letters only)']
     ]);
 
     const workbook = XLSX.utils.book_new();

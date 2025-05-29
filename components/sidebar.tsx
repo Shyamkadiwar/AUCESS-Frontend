@@ -32,7 +32,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-gray-700 h-full max-h-screen fixed left-0 top-0 text-white p-6">
+    <div className="w-64 dark:bg-[#18181a] h-full max-h-screen fixed left-0 top-0 text-white p-6">
       <div className="flex items-center gap-2 mb-8">
         <Image src={Logo} alt='Aucess' className='w-12 h-16'/>
         <h1 className="text-2xl font-bold">AUCESS</h1>

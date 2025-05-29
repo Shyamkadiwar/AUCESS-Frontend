@@ -6,18 +6,21 @@ import HowItWorks from "@/components/landing/HowItWorks";
 import LeaderBoard from "@/components/landing/LeaderBoard";
 import Pitch from "@/components/landing/Pitch";
 import Navbar from "@/components/Navbar";
+import SmoothScrolling from "./SmoothScrolling";
 
 export default function Home() {
   return (<>
     <Foreground />
     <div className="h-full relative overflow-hidden">
-      <Navbar />
-      <HeroComponent />
-      {/* <ChooseOptions /> */}
-      <Pitch />
-      <LeaderBoard />
-      <HowItWorks />
-      <FAQs />
+      <SmoothScrolling>
+        <Navbar />
+        <HeroComponent />
+        {/* <ChooseOptions /> */}
+        <Pitch />
+        <LeaderBoard />
+        <HowItWorks />
+        <FAQs />
+      </SmoothScrolling>
     </div>
   </>
   );

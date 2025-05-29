@@ -51,10 +51,12 @@ const SignUpComponent = () => {
       setLoading(true);
       setError(null);
       
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/signin`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/signup`, {
         name,
         email,
         password,
+      }, {
+        withCredentials : true
       });
 
       // Redirect on successful signup
