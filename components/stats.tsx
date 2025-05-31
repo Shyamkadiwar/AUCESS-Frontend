@@ -93,7 +93,7 @@ export function Stats() {
   }
 
   return (
-    <div className="flex flex-col w-full justify-between pb-8 border-b border- lg:flex-row gap-6 mb-8">
+    <div className="flex flex-col w-full justify-between pb-8 border-b border-[#bdbdbd] lg:flex-row gap-6 mb-8">
       {stats.map((stat) => (
         <Link
           key={stat.label}
@@ -101,7 +101,7 @@ export function Stats() {
           rel="noopener noreferrer"
           className='w-full'
         >
-          <Card className="w-full flex flex-col p-4 relative bg-white dark:bg-[#18181a]">
+          <Card className="w-full flex flex-col p-4 relative bg-white dark:bg-[#18181a] dark:border-0 border-[1px] border-[#bdbdbd]">
             <div className="flex items-start w-full justify-between">
               <div>
                 <h2 className="text-gray-600 dark:text-white/90">{stat.label}</h2>

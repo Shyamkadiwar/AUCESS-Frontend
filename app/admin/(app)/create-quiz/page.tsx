@@ -186,7 +186,7 @@ const CreateQuiz = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="h-full min-h-screen flex items-center justify-center">
+      <div className="h-full min-h-screen flex items-center bg-white dark:bg-[#0e0e10] justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     );
@@ -195,15 +195,15 @@ const CreateQuiz = () => {
   // Access denied state (should redirect, but just in case)
   if (!isAdmin) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
         <main className="md:ml-64 p-8">
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
             <ShieldAlert className="w-16 h-16 text-red-500 mb-4" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-            <p className="text-gray-600 mb-6">You don't have permission to access this page. Only administrators can manage sub-admins.</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white/90 mb-2">Access Denied</h1>
+            <p className="text-neutral-400 mb-6">You don't have permission to access this page. Only administrators can manage sub-admins.</p>
             <Button onClick={() => router.push('/admin/dashboard')}>
               Return to Dashboard
             </Button>
@@ -214,19 +214,19 @@ const CreateQuiz = () => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Create Quiz</h1>
-            <p className="text-gray-600">Create new quizzes for your students</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-[#e2f1fc]">Create Quiz</h1>
+            <p className="text-neutral-500">Create new quizzes for your students</p>
           </div>
         </div>
 
-        <div className="bg-sky-50 text-black shadow-md rounded-lg p-6 space-y-6">
+        <div className="dark:bg-[#18181a] shadow-md rounded-lg p-6 space-y-6 dark:border-0 border-[#bdbdbd] border-[1px]">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="title">Quiz Title</Label>
@@ -311,7 +311,7 @@ const CreateQuiz = () => {
                   onChange={handleFileUpload}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
-                <Button variant="secondary" className="flex items-center gap-2">
+                <Button variant="outline" className="flex items-center gap-2">
                   <Upload className="w-4 h-4" />
                   {fileName ? `${fileName}` : 'Upload Excel'}
                 </Button>

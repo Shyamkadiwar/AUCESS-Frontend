@@ -32,24 +32,24 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-64 dark:bg-[#18181a] h-full max-h-screen fixed left-0 top-0 text-white p-6">
+    <div className="w-64 bg-white dark:border-0 border-[#bdbdbd] border-[1px] dark:bg-[#18181a] h-full max-h-screen fixed left-0 top-0 dark:text-white p-6">
       <div className="flex items-center gap-2 mb-8">
         <Image src={Logo} alt='Aucess' className='w-12 h-16'/>
-        <h1 className="text-2xl font-bold">AUCESS</h1>
+        <h1 className="text-2xl text-black dark:text-white/90 font-bold">AUCESS</h1>
       </div>
       
       <nav className="space-y-2">
         <Link href={'/user/dashboard'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Home className="w-5 h-5" />
-          Dashboard
+          <Home className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Dashboard</h1>
         </Link>
         <Link href={'/user/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <BookOpen className="w-5 h-5" />
-          Ongoing Quizzes
+          <BookOpen className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Ongoing Quizzes</h1>
         </Link>
         <Link href={'/user/completed-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Trophy className="w-5 h-5" />
-          Completed Quizzes
+          <Trophy className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Completed Quizzes</h1>
         </Link>
         <button 
           onClick={handleLogout}

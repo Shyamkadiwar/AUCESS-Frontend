@@ -111,11 +111,11 @@ export function Stats() {
   return (
     <div className="flex flex-col w-full justify-between lg:flex-row gap-6 mb-8">
       {stats.map((stat) => (
-        <Card key={stat.label} className="w-full bg-sky-50 flex flex-col p-4 relative">
+        <Card key={stat.label} className="w-full bg-white dark:bg-[#18181a] dark:border-0 border-[#bdbdbd] border-[1px] flex flex-col p-4 relative">
           <div className="flex items-start w-full justify-between">
             <div>
-              <p className="text-gray-600 text-sm">{stat.label}</p>
-              <p className="text-2xl font-semibold text-black mt-1">
+              <p className="text-gray-600 dark:text-white/90 text-sm">{stat.label}</p>
+              <p className="text-2xl font-semibold text-black dark:text-white/90 mt-1">
                 {loading ? '...' : stat.value}
               </p>
             </div>

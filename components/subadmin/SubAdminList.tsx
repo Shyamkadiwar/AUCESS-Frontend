@@ -54,18 +54,18 @@ const SubAdminList: React.FC<SubAdminListProps> = ({ subAdmins, isAdmin, onRefre
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white dark:bg-[#18181a] dark:border-0 border-[#bdbdbd] border-[1px] rounded-lg shadow-lg overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-500">
+          <thead className="bg-gray-100 dark:bg-[#18181a]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                 Created At
               </th>
               {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -78,17 +78,17 @@ const SubAdminList: React.FC<SubAdminListProps> = ({ subAdmins, isAdmin, onRefre
               )}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-[#18181a] divide-y divide-gray-700">
             {subAdmins.map((subAdmin: SubAdmin) => (
-              <tr key={subAdmin.id} className="hover:bg-gray-50">
+              <tr key={subAdmin.id} className="hover:bg-gray-200 dark:hover:bg-[#242427]">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{subAdmin.name}</div>
+                  <div className="text-sm font-medium text-gray-900 dark:text-[#e2f1fc]">{subAdmin.name}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{subAdmin.email}</div>
+                  <div className="text-sm text-gray-900 dark:text-[#e2f1fc]">{subAdmin.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-900 dark:text-[#e2f1fc]">
                     {new Date(subAdmin.createdAt).toLocaleDateString()}
                   </div>
                 </td>

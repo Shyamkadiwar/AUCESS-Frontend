@@ -96,7 +96,7 @@ const DashboardComponent = () => {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-3">
               <div className="hidden md:block">
-                <p className="font-medium text-gray-900 text-white/90">
+                <p className="font-medium text-gray-900 dark:text-white/90">
                   User : {user.name}
                 </p>
                 <p className="font-medium text-neutral-400">

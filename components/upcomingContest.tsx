@@ -136,11 +136,18 @@ export function UpcomingQuizzes(): JSX.Element {
           quizzes.map((quiz) => (
             <Card
               key={quiz.id}
-              className="flex-shrink-0 w-[30rem] bg-slate-200  dark:bg-[#18181a]"
+              className="flex-shrink-0 w-[30rem] dark:border-0 border-[#bdbdbd] border-[1px] dark:bg-[#18181a]"
             >
               <div className="p-4">
                 <div className="flex flex-col h-full">
-                  <h3 className="font-semibold text-black text-lg mb-2 dark:text-white/90">{quiz.title}</h3>
+                  <div className='flex flex-row w-full justify-between items-center'>
+                    <h3 className="font-semibold text-black dark:text-white/90 text-lg mb-2">{quiz.title}</h3>
+                    <div className="flex text-sm mb-4 gap-2 text-[#bfe1f8] w-fit rounded-3xl items-center px-3 py-2 bg-[#0d2b44]">
+                      <Clock className="w-4 h-4" />
+                      <p className='text-[#bfef8]'>Starts in</p>
+                      {getTimeLeft(quiz.endDate)}
+                    </div>
+                  </div>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-2 dark:text-neutral-400">{quiz.description}</p>
 
                   <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-neutral-400 mb-3">
@@ -150,12 +157,12 @@ export function UpcomingQuizzes(): JSX.Element {
                     </div>
                     <div className="flex items-center gap-1">
                       <BookOpen className="w-4 h-4 text-[#86caf3]" />
-                      {quiz.totalQuestions === 1 ?  "Question" : "Questions"} : {quiz.totalQuestions}
+                      {quiz.totalQuestions === 1 ? "Question" : "Questions"} : {quiz.totalQuestions}
                     </div>
                   </div>
 
                   <div className="mt-auto">
-                    <div className="flex items-center gap-2 text-white/90 font-semibold my-5">
+                    <div className="flex items-center gap-2 dark:text-white/90 font-medium my-5">
                       Entry Fee: ${quiz.price}
                     </div>
                     <Link href={`/user/quiz/${quiz.id}`}>

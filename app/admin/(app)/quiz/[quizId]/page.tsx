@@ -210,14 +210,14 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
 
   if (loading) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
         <div className='hidden md:flex'>
-          <Sidebar />
+          <Sidebar /> 
         </div>
         <main className="md:ml-64 p-8 flex items-center justify-center h-screen">
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading quiz details...</p>
+            <p className="mt-4 text-gray-900 dark:text-white/90">Loading quiz details...</p>
           </div>
         </main>
       </div>
@@ -226,14 +226,14 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
 
   if (error) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
         <main className="md:ml-64 p-8 flex items-center justify-center">
-          <div className="bg-red-50 p-6 rounded-lg border border-red-200 text-center w-full max-w-2xl">
+          <div className="bg-[#18181a] p-6 rounded-lg border text-center w-full max-w-2xl">
             <h2 className="text-2xl font-bold text-red-600 mb-2">Error</h2>
-            <p className="text-gray-700">{error}</p>
+            <p className="text-gray-900 dark:text-white/90">{error}</p>
             <button
               onClick={() => window.location.reload()}
               className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
@@ -248,14 +248,14 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
 
   if (!quiz) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
         <main className="md:ml-64 p-8 flex items-center justify-center">
-          <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 text-center w-full max-w-2xl">
+          <div className="bg-[#18181a] p-6 rounded-lg text-center w-full max-w-2xl">
             <h2 className="text-2xl font-bold text-yellow-600 mb-2">Quiz Not Found</h2>
-            <p className="text-gray-700">The requested quiz could not be found.</p>
+            <p className="text-gray-900 dark:text-white/90">The requested quiz could not be found.</p>
             <button
               onClick={() => window.history.back()}
               className="mt-4 px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition"
@@ -269,15 +269,15 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">{quiz.title}</h1>
-            <p className="text-gray-600">{quiz.description}</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-[#e2f1fc]">{quiz.title}</h1>
+            <p className="text-gray-600 dark:text-neutral-400">{quiz.description}</p>
           </div>
           <div className="flex gap-2">
             <Link 
@@ -301,18 +301,18 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
         {/* Delete Confirmation Modal */}
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-sky-50 rounded-lg p-6 w-full max-w-md">
-              <div className="flex items-center gap-3 mb-4 text-red-600">
+            <div className="bg-sky-50 dark:bg-[#18181a] rounded-lg p-6 w-full max-w-md">
+              <div className="flex items-center gap-3 mb-4 dark:text-white/90">
                 <AlertCircle className="h-6 w-6" />
-                <h3 className="text-xl font-semibold">Delete Quiz</h3>
+                <h3 className="text-xl font-semibold dark:text-white/90">Delete Quiz</h3>
               </div>
-              <p className="text-gray-700 mb-6">
+              <p className="text-neutral-500 mb-6">
                 Are you sure you want to delete "{quiz.title}"? This action cannot be undone and will remove all questions, attempts, and leaderboard entries associated with this quiz.
               </p>
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="px-4 py-2 border text-black border-gray-300 rounded-md hover:bg-gray-50 transition"
+                  className="px-4 py-2 border bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
                   disabled={isDeleting}
                 >
                   Cancel
@@ -331,17 +331,17 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
 
         {/* Quiz details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="dark:border-0 border-[#bdbdbd] border-[1px] dark:bg-[#18181a] p-6 rounded-lg shadow-lg">
             <div className="flex items-center gap-3 mb-4">
               <FileText className="h-6 w-6 text-blue-600" />
-              <h2 className="text-xl font-semibold text-gray-800">Overview</h2>
+              <h2 className="text-xl font-semibold text-black dark:text-white/90">Overview</h2>
             </div>
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-gray-500" />
                 <div>
                   <p className="text-sm text-gray-500">Created</p>
-                  <p className="text-gray-800">{formatDate(quiz.createdAt)}</p>
+                  <p className="text-black dark:text-white/90">{formatDate(quiz.createdAt)}</p>
                 </div>
               </div>
               {quiz.startDate && (
@@ -349,7 +349,7 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
                   <Calendar className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-500">Start Date</p>
-                    <p className="text-gray-800">{formatDate(quiz.startDate)}</p>
+                    <p className="text-black dark:text-white/90">{formatDate(quiz.startDate)}</p>
                   </div>
                 </div>
               )}
@@ -358,7 +358,7 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
                   <Calendar className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-500">End Date</p>
-                    <p className="text-gray-800">{formatDate(quiz.endDate)}</p>
+                    <p className="text-black dark:text-white/90">{formatDate(quiz.endDate)}</p>
                   </div>
                 </div>
               )}
@@ -366,37 +366,37 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
                 <Clock className="h-5 w-5 text-gray-500" />
                 <div>
                   <p className="text-sm text-gray-500">Time Limit</p>
-                  <p className="text-gray-800">{formatTime(quiz.timeLimit)}</p>
+                  <p className="text-black dark:text-white/90">{formatTime(quiz.timeLimit)}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-gray-500" />
                 <div>
                   <p className="text-sm text-gray-500">Questions</p>
-                  <p className="text-gray-800">{quiz.totalQuestions}</p>
+                  <p className="text-black dark:text-white/90">{quiz.totalQuestions}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200">
+          <div className="dark:border-0 border-[#bdbdbd] border-[1px] dark:bg-[#18181a] p-6 rounded-lg shadow-lg">
             <div className="flex items-center gap-3 mb-4">
               <Users className="h-6 w-6 text-blue-600" />
-              <h2 className="text-xl font-semibold text-gray-800">Participation</h2>
+              <h2 className="text-xl font-semibold text-black dark:text-white/90">Participation</h2>
             </div>
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-gray-500" />
                 <div>
                   <p className="text-sm text-gray-500">Total Participants</p>
-                  <p className="text-gray-800">{quiz.totalParticipants}</p>
+                  <p className="text-black dark:text-white/90">{quiz.totalParticipants}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Award className="h-5 w-5 text-gray-500" />
                 <div>
-                  <p className="text-sm text-black">Leaderboard Entries</p>
-                  <p className="text-gray-800">{quiz.leaderboardEntries}</p>
+                  <p className="text-sm text-gray-500">Leaderboard Entries</p>
+                  <p className="text-black dark:text-white/90">{quiz.leaderboardEntries}</p>
                 </div>
               </div>
               <button
@@ -419,20 +419,20 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
             </div>
           </div>
 
-          <div className="bg-sky-50 p-6 rounded-lg text-black shadow-sm border border-gray-200">
+          <div className="dark:border-0 border-[#bdbdbd] border-[1px] dark:bg-[#18181a] p-6 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-3">
                 <Award className="h-6 w-6 text-blue-600" />
-                <h2 className="text-xl font-semibold text-gray-800">Top Scores</h2>
+                <h2 className="text-xl font-semibold text-black dark:text-white/90">Top Scores</h2>
               </div>
             </div>
             {quiz.topScores && quiz.topScores.length > 0 ? (
               <div className="space-y-2">
                 {quiz.topScores.slice(0, 5).map((entry: LeaderboardEntry, index: number) => (
-                  <div key={entry.id} className="flex items-center justify-between p-2 rounded bg-gray-50 hover:bg-gray-100">
+                  <div key={entry.id} className="flex items-center justify-between p-2 rounded bg-gray-100 dark:bg-[#2d2d31] hover:bg-gray-100">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-600">{index + 1}.</span>
-                      <span className="font-medium">{entry.user.name}</span>
+                      <span className="font-medium text-black dark:text-white/90">{index + 1}.</span>
+                      <span className="font-medium text-black dark:text-white/90">{entry.user.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       {/* <span className="text-sm text-gray-600">{formatTime(entry.completionTime)}</span> */}
@@ -449,60 +449,60 @@ const Quiz = ({ params }: { params: Promise<PageParams> }) => {
 
         {/* Quiz Participants Table */}
         {showUsers && (
-          <div className="bg-sky-50 p-6 rounded-lg shadow-sm border border-gray-200 mt-6">
+          <div className="dark:bg-[#18181a] p-6 rounded-lg shadow-lg dark:border-0 border-[#bdbdbd] border-[1px] mt-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <Users className="h-6 w-6 text-blue-600" />
-                <h2 className="text-xl font-semibold text-gray-800">Quiz Participants</h2>
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">Quiz Participants</h2>
               </div>
               <button 
                 onClick={() => setShowUsers(false)}
-                className="text-sm text-gray-500 hover:text-gray-700"
+                className="text-sm text-gray-400 hover:text-gray-600"
               >
                 Hide
               </button>
             </div>
             
             {quizUsers && quizUsers.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+              <div className="overflow-x-auto bg-gray-50 dark:bg-[#18181a]">
+                <table className="min-w-full divide-y divide-gray-500 bg-gray-200 dark:bg-[#18181a]">
+                  <thead className="bg-gray-200 dark:bg-[#18181a]">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                         User
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                         Email
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                         Score
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                         Status
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                         Date
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-white dark:bg-[#18181a] divide-y divide-gray-700">
                     {quizUsers.map((attempt) => (
-                      <tr key={attempt.id} className="hover:bg-gray-50">
+                      <tr key={attempt.id} className="hover:bg-gray-200 dark:hover:bg-[#242427]">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="font-medium text-gray-900">{attempt.user.name}</div>
+                          <div className="font-medium text-gray-900 dark:text-[#e2f1fc]">{attempt.user.name}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-gray-500">{attempt.user.email}</div>
+                          <div className="text-gray-900 dark:text-[#e2f1fc]">{attempt.user.email}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="font-medium text-blue-600">{attempt.score}/{quiz.questions.length}</div>
+                          <div className="font-medium text-blue-600 ">{attempt.score}/{quiz.questions.length}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-2 py-1 text-xs font-medium rounded-full ${attempt.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                             {attempt.completed ? 'Completed' : 'In Progress'}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-[#e2f1fc]">
                           {formatDate(attempt.createdAt)}
                         </td>
                       </tr>

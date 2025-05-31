@@ -56,18 +56,18 @@ const CreateSubAdminForm: React.FC<CreateSubAdminFormProps> = ({ onSuccess }) =>
 
     return (
         <div className='w-full flex justify-center items-center'>
-            <div className="bg-white w-1/3 p-6 rounded-lg shadow-md mb-8">
-                <h2 className="text-xl font-semibold text-black mb-4">Create New Sub-Admin</h2>
+            <div className="bg-white dark:bg-[#18181a] w-1/3 p-6 rounded-lg shadow-lg mb-8 dark:border-0 border-[#bdbdbd] border-[1px]">
+                <h2 className="text-xl font-semibold text-black dark:text-white/90 mb-4">Create New Sub-Admin</h2>
 
                 {error && (
-                    <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+                    <div className="mb-4 p-3 bg-red-100 dark:bg-[#18181a] text-red-700 rounded-md">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4 text-black">
                     <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="name" className="block text-sm font-medium text-neutral-500">
                             Name
                         </label>
                         <input
@@ -77,12 +77,12 @@ const CreateSubAdminForm: React.FC<CreateSubAdminFormProps> = ({ onSuccess }) =>
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                            className="mt-1 block w-full px-3 py-2 text-black text-white/90 bg-white dark:bg-[#18181a] border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="email" className="block text-sm font-medium text-neutral-500">
                             Email
                         </label>
                         <input
@@ -92,12 +92,12 @@ const CreateSubAdminForm: React.FC<CreateSubAdminFormProps> = ({ onSuccess }) =>
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="mt-1 block w-full px-3 py-2 border  bg-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                            className="mt-1 block w-full px-3 py-2 border text-black text-white/90 bg-white dark:bg-[#18181a] border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="password" className="block text-sm font-medium text-neutral-500">
                             Password
                         </label>
                         <div className="relative">
@@ -108,12 +108,12 @@ const CreateSubAdminForm: React.FC<CreateSubAdminFormProps> = ({ onSuccess }) =>
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
-                                className="mt-1 block w-full px-3 py-2 border bg-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                className="mt-1 block w-full px-3 py-2 border text-black text-white/90 bg-white dark:bg-[#18181a] border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                className="absolute inset-y-0 text-black text-white/90 right-0 pr-3 flex items-center"
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>

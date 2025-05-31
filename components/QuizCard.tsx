@@ -72,15 +72,15 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const quizStatus = getQuizStatusInfo();
 
   return (
-    <div className="bg-[#18181a] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <div className="dark:bg-[#18181a] dark:border-0 border-[#bdbdbd] border-[1px] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div className="flex flex-col w-full">
             <div className='flex flex-row justify-between w-full items-center'>
-              <h3 className="text-xl font-bold text-black text-white/90 truncate pr-4">
+              <h3 className="text-xl font-bold text-black dark:text-white/90 truncate pr-4">
                 {quiz.title}
               </h3>
-              <div className={`flex items-center ${quizStatus.statusColor} px-4 py-2 rounded-full text-xs font-medium w-fit gap-1 mt-2`}>
+              <div className={`flex items-center ${quizStatus.statusColor} px-4 py-2 rounded-full text-xs font-medium w-fit gap-1 mt-2 mb-4`}>
                 {quizStatus.icon}
                 {quizStatus.statusText}
               </div>
@@ -105,11 +105,11 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
           </div>
         </div>
 
-        <span className=" text-white/90 text-lg my-5 font-semibold">
+        <span className=" dark:text-white/90 text-lg my-5 font-semibold">
           Entry fee : {quiz.price}
         </span>
 
-        <div className="flex justify-between items-center text-black text-white border-t pt-4 mt-4">
+        <div className="flex justify-between items-center text-black dark:text-white border-t pt-4 mt-4">
           <div className="flex flex-col">
             {quiz.startDate && (
               <span className="text-xs text-gray-500">
