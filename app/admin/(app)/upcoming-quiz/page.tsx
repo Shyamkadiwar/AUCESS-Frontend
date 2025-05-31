@@ -32,7 +32,7 @@ const Quizzes = () => {
     const fetchQuizzes = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/upcoming', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/upcoming`, {
           withCredentials: true
         });
 
@@ -60,20 +60,20 @@ const Quizzes = () => {
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-900"></div>
       </div>
     );
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Upcoming Quizzes</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-[#e2f1fc]">Upcoming Quizzes</h1>
           </div>
           <Link href="/admin/create-quiz">
             <Button className="flex items-center gap-2">
@@ -84,8 +84,8 @@ const Quizzes = () => {
         </div>
 
         {quizzes.length === 0 ? (
-          <div className="bg-white shadow-md rounded-lg p-6 text-center">
-            <p className="text-gray-600">No quizzes found. Create your first quiz!</p>
+          <div className="bg-white dark:bg-[#0e0e10] shadow-md rounded-lg p-6 text-center">
+            <p className="ext-gray-900 dark:text-[#e2f1fc]">No quizzes found. Create your first quiz!</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

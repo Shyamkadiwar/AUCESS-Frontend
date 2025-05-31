@@ -85,9 +85,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${martelsansExtraLight.variable} ${martelsansLight.variable} ${martelsansRegular.variable} ${martelsansSemiBold.variable} ${martelsansBold.variable} ${martelsansExtraBold.variable} ${martelsansBlack.variable} ${neueUltraBold.variable} ${neueBold.variable} ${neueMedium.variable} ${neueRegular.variable} antialiased`}>
         <ThemeProvider>
-          <SmoothScrolling>
             {children}
-          </SmoothScrolling>
         </ThemeProvider>
       </body>
     </html>

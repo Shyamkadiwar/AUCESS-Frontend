@@ -19,7 +19,7 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       
@@ -106,11 +106,11 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
   const quizStatus = getQuizStatusInfo();
 
   return (
-    <div className="bg-sky-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+    <div className="dark:bg-[#18181a] dark:border-0 border-[#bdbdbd] border-[1px] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div className="flex flex-col">
-            <h3 className="text-xl font-bold text-gray-900 truncate pr-4">
+            <h3 className="text-xl font-bold text-black dark:text-white/90 truncate pr-4">
               {quiz.title}
             </h3>
             <div className={`flex items-center ${quizStatus.statusColor} px-2 py-1 rounded-full text-xs font-medium w-fit mt-2`}>
@@ -123,40 +123,40 @@ export const QuizCard = ({ quiz }: { quiz: Quiz }) => {
           </span>
         </div>
 
-        <p className="text-gray-600 mb-4 line-clamp-2">
+        <p className="text-neutral-400 mb-4 line-clamp-2">
           {quiz.description}
         </p>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-gray-500" />
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-gray-600 dark:text-neutral-400">
               {quiz.totalQuestions} Questions
             </span>
           </div>
           <div className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-gray-500" />
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-gray-600 dark:text-neutral-400">
               {quiz.totalParticipants} Participants
             </span>
           </div>
         </div>
 
-        <div className="flex justify-between items-center text-black border-t pt-4 mt-4">
+        <div className="flex justify-between items-center text-black dark:text-white border-t pt-4 mt-4">
           <div className="flex flex-col">
             {/* Only show created date if user is admin */}
             {isAdmin && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-black dark:text-white">
                 Created: {formatDate(quiz.createdAt)}
               </span>
             )}
             {quiz.startDate && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-black dark:text-white">
                 Start: {formatDate(quiz.startDate)}
               </span>
             )}
             {quiz.endDate && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-black dark:text-white">
                 End: {formatDate(quiz.endDate)}
               </span>
             )}

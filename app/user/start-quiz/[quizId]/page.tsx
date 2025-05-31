@@ -1,7 +1,7 @@
 "use client"
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import axios from 'axios';
-import { ArrowLeft, Clock, AlertCircle, CheckCircle, Loader2, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Clock, AlertCircle, Loader2, AlertTriangle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // Define interfaces for type safety
@@ -24,7 +24,7 @@ interface Quiz {
   questions: QuizQuestion[];
 }
 
-const QuizTaking = ({ params }: { params: { quizId: string } }) => {
+const QuizTaking = ({ params }: { params: Promise<{ quizId: string }> }) => {
   const router = useRouter();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   const maxTabSwitches = 3;
   const fullscreenRef = useRef<HTMLDivElement>(null);
 
-  const quizId = params?.quizId;
+  const {quizId} = use(params);
 
   // Request fullscreen mode
   const enterFullscreen = () => {
@@ -115,7 +115,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
     const fetchQuizQuestions = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:3000/api/v1/quiz/${quizId}/take`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}/take`, {
           withCredentials: true
         });
 
@@ -215,7 +215,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
 
     try {
       setIsSubmitting(true);
-      const response = await axios.post(`http://localhost:3000/api/v1/quiz/${quizId}/submit`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}/submit`, {
         answers: answersArray
       }, {
         withCredentials: true
@@ -258,10 +258,10 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   // Loading state
   if (loading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="h-screen w-full flex items-center justify-center bg-white dark:bg-[#0e0e10]">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading quiz questions...</p>
+          <p className="mt-4 text-black dark:text-white/90">Loading quiz questions...</p>
         </div>
       </div>
     );
@@ -270,11 +270,11 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   // Error state
   if (error) {
     return (
-      <div className="h-screen w-full text-black flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
-        <div className="bg-red-50 p-6 rounded-lg border border-red-200 text-center w-full max-w-md">
+      <div className="h-screen w-full text-black flex items-center justify-center bg-white dark:bg-[#0e0e10] ">
+        <div className="bg-white dark:bg-[#18181a] p-6 border-[#bdbdbd] border-[1px] shadow-md rounded-lg text-center w-full max-w-md">
           <AlertCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-red-600 mb-2">Error</h2>
-          <p className="text-gray-700 mb-4">{error}</p>
+          <p className="text-black dark:text-white/90 mb-4">{error}</p>
           <button 
             onClick={() => router.back()}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
@@ -289,11 +289,11 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   // If quiz not loaded
   if (!quiz) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
-        <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200 text-center w-full max-w-md">
+      <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br bg-white dark:bg-[#0e0e10]">
+        <div className="bg-white dark:bg-[#18181a] p-6 rounded-lg text-center w-full max-w-md">
           <AlertCircle className="h-12 w-12 text-yellow-600 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-yellow-600 mb-2">Quiz Not Found</h2>
-          <p className="text-gray-700 mb-4">The requested quiz could not be loaded.</p>
+          <p className="text-black text-white/90 mb-4">The requested quiz could not be loaded.</p>
           <button 
             onClick={() => router.back()}
             className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition"
@@ -308,13 +308,13 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   // Fullscreen warning state
   if (showFullscreenWarning) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-300">
-        <div className="bg-white p-8 rounded-lg shadow-lg text-center w-full max-w-md">
+      <div className="h-screen w-full flex items-center justify-center bg-white dark:bg-[#0e0e10]">
+        <div className="bg-white dark:bg-[#18181a] border-[#bdbdbd] border-[1px] p-8 rounded-lg shadow-lg text-center w-full max-w-md">
           <AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Quiz Rules</h2>
+          <h2 className="text-2xl font-bold text-black dark:text-white/90 mb-4">Quiz Rules</h2>
           <div className="text-left mb-6 space-y-3">
-            <p className="text-gray-700">This quiz will open in fullscreen mode:</p>
-            <ul className="list-disc pl-5 text-gray-700 space-y-2">
+            <p className="text-gray-text-black dark:text-white/70">This quiz will open in fullscreen mode:</p>
+            <ul className="list-disc pl-5 text-black dark:text-white/80 space-y-2">
               <li><strong>No tab switching allowed</strong> - You are permitted a maximum of <strong>3 tab switches</strong>.</li>
               <li>Exiting fullscreen will count as a tab switch.</li>
               <li>After 3 tab switches, your quiz will be automatically submitted.</li>
@@ -335,9 +335,9 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
   const currentQuestionData = quiz.questions[currentQuestion];
 
   return (
-    <div ref={fullscreenRef} className="h-screen w-full flex flex-col bg-gradient-to-br from-blue-200 to-blue-300">
+    <div ref={fullscreenRef} className="h-screen w-full flex flex-col bg-white dark:bg-[#0e0e10]">
       {/* Quiz header */}
-      <header className="bg-sky-50 shadow-sm p-4 flex justify-between items-center">
+      <header className="bg-white dark:bg-[#18181a] border-[#bdbdbd] border-[1px] shadow-sm p-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <button 
             onClick={() => {
@@ -350,15 +350,15 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
             }} 
             className="p-2 rounded-full hover:bg-gray-100"
           >
-            <ArrowLeft className="h-5 w-5 text-black" />
+            <ArrowLeft className="h-5 w-5 text-black dark:text-white" />
           </button>
-          <h1 className="font-bold text-xl text-gray-800">{quiz.title}</h1>
+          <h1 className="font-bold text-xl text-black dark:text-white/90">{quiz.title}</h1>
         </div>
         
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-gray-500" />
-            <span className="font-medium text-black">
+            <span className="font-medium text-black dark:text-white/90">
               {timeLeft !== null ? formatTime(timeLeft) : formatTime(timeElapsed)}
             </span>
           </div>
@@ -372,8 +372,8 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
       <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6">
         <div className="max-w-3xl mx-auto">
           {/* Question */}
-          <div className="bg-sky-50 rounded-lg shadow-sm p-6 mb-6">
-            <h2 className="text-xl font-medium text-gray-800 mb-6">
+          <div className="bg-white dark:bg-[#18181a] border-[#bdbdbd] border-[1px] rounded-lg shadow-sm p-6 mb-6">
+            <h2 className="text-xl font-medium text-black dark:text-white/90 mb-6">
               {currentQuestionData.text}
             </h2>
             
@@ -384,8 +384,8 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
                   key={option.id} 
                   className={`flex items-center gap-3 p-4 rounded-lg border cursor-pointer transition ${
                     answers[currentQuestionData.id] === option.id
-                      ? 'bg-blue-50 border-blue-300'
-                      : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                      ? 'bg-blue-50 dark:bg-[#242427] border-blue-300'
+                      : 'bg-gray-50 dark:bg-[#242427] border-gray-200 hover:bg-gray-100'
                   }`}
                 >
                   <input
@@ -396,7 +396,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
                     onChange={() => handleAnswerSelect(currentQuestionData.id, option.text)}
                     className="h-5 w-5 text-blue-600"
                   />
-                  <span className="text-gray-800">{option.text}</span>
+                  <span className="text-black dark:text-white/90">{option.text}</span>
                 </label>
               ))}
             </div>
@@ -405,7 +405,7 @@ const QuizTaking = ({ params }: { params: { quizId: string } }) => {
       </div>
 
       {/* Quiz navigation */}
-      <footer className="bg-sky-50 shadow-sm p-4 flex justify-between items-center">
+      <footer className="bg-white dark:bg-[#18181a] border-[#bdbdbd] border-[1px] shadow-sm p-4 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <button
             onClick={handlePrevQuestion}

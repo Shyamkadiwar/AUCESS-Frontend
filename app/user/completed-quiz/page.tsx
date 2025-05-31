@@ -29,7 +29,7 @@ const Quizzes = () => {
     const fetchQuizzes = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:3000/api/v1/quiz/user/quizzes/completed', {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/user/quizzes/completed`, {
           withCredentials: true
         });
 
@@ -63,21 +63,21 @@ const Quizzes = () => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Quizzes</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-[#e2f1fc]">Quizzes</h1>
           </div>
           
         </div>
 
         {quizzes.length === 0 ? (
           <div className="bg-white shadow-md rounded-lg p-6 text-center">
-            <p className="text-gray-600">No quizzes found. Create your first quiz!</p>
+            <p className="text-gray-900 dark:text-[#e2f1fc]">Join your first quiz!</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

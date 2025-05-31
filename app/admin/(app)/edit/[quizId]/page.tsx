@@ -64,7 +64,7 @@ const EditQuiz = () => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get<DashboardResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       
@@ -82,7 +82,7 @@ const EditQuiz = () => {
           fetchQuizData();
         }
       }
-    } catch (err) {
+    } catch (err) { 
       console.error('Authentication error:', err);
       toast.error('Authentication failed. Please login again.');
       router.push('/login');
@@ -95,7 +95,7 @@ const EditQuiz = () => {
     setIsFetching(true);
     try {
       const response = await axios.get<{success: boolean, data: QuizData}>(
-        `http://localhost:3000/api/v1/quiz/${quizId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}`,
         { withCredentials: true }
       );
       
@@ -188,7 +188,7 @@ const EditQuiz = () => {
       const operation = fileName ? 'replace' : undefined;
       
       const response = await axios.patch(
-        `http://localhost:3000/api/v1/quiz/${quizId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/quiz/${quizId}`,
         {
           title,
           description,
@@ -243,8 +243,8 @@ const EditQuiz = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="h-full min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      <div className="h-full min-h-screen flex items-center bg-white dark:bg-[#0e0e10] justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-900"></div>
       </div>
     );
   }
@@ -252,15 +252,15 @@ const EditQuiz = () => {
   // Access denied state (should redirect, but just in case)
   if (!isAdmin) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
         <main className="md:ml-64 p-8">
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
             <ShieldAlert className="w-16 h-16 text-red-500 mb-4" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-            <p className="text-gray-600 mb-6">You don't have permission to access this page. Only administrators can edit quizzes.</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white/90 mb-2">Access Denied</h1>
+            <p className="text-neutral-500 mb-6">You don't have permission to access this page. Only administrators can edit quizzes.</p>
             <Button onClick={() => router.push('/admin/dashboard')}>
               Return to Dashboard
             </Button>
@@ -273,15 +273,15 @@ const EditQuiz = () => {
   // Fetching quiz data
   if (isFetching) {
     return (
-      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+      <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
         <div className='hidden md:flex'>
           <Sidebar />
         </div>
         <main className="md:ml-64 p-8">
           <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
             <Loader2 className="w-16 h-16 text-blue-500 mb-4 animate-spin" />
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Loading Quiz Data</h1>
-            <p className="text-gray-600">Please wait while we fetch the quiz information...</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-[#e2f1fc] mb-2">Loading Quiz Data</h1>
+            <p className="text-neutral-500">Please wait while we fetch the quiz information...</p>
           </div>
         </main>
       </div>
@@ -289,19 +289,19 @@ const EditQuiz = () => {
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Edit Quiz</h1>
-            <p className="text-gray-600">Update quiz details and questions</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-[#e2f1fc]">Edit Quiz</h1>
+            <p className="text-neutral-600">Update quiz details and questions</p>
           </div>
         </div>
 
-        <div className="bg-sky-50 text-black shadow-md rounded-lg p-6 space-y-6">
+        <div className="dark:bg-[#18181a] dark:border-0 border-[#bdbdbd] border-[1px] shadow-lg rounded-lg p-6 space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <Label htmlFor="title">Quiz Title</Label>
@@ -370,12 +370,12 @@ const EditQuiz = () => {
           <div className="space-y-4">
             <div className="flex flex-col">
               <Label className="mb-2">Current Questions</Label>
-              <div className="bg-gray-50 p-4 rounded-md">
+              <div className="bg-gray-50 dark:bg-[#18181a] p-4 rounded-md">
                 <p className="text-sm text-gray-600">{questions.length} questions in this quiz</p>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-gray-700">
               <Label className="mb-2">Replace Questions (Optional)</Label>
               <p className="text-sm text-gray-600 mb-3">Upload a new Excel file to replace all existing questions</p>
               
@@ -396,7 +396,7 @@ const EditQuiz = () => {
                     onChange={handleFileUpload}
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
-                  <Button variant="secondary" className="flex items-center gap-2">
+                  <Button variant="outline" className="flex items-center gap-2">
                     <Upload className="w-4 h-4" />
                     {fileName ? `${fileName}` : 'Upload Excel'}
                   </Button>

@@ -40,7 +40,7 @@ const Students = () => {
   const fetchUsers = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get<ApiResponse>('http://localhost:3000/api/v1/users/', {
+      const response = await axios.get<ApiResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/users/`, {
         withCredentials: true
       });
       
@@ -58,7 +58,7 @@ const Students = () => {
   const checkAdminStatus = async () => {
     try {
       // Use the dashboard endpoint to check if user is authenticated and their role
-      const response = await axios.get<DashboardResponse>('http://localhost:3000/api/v1/admin/dashboard', {
+      const response = await axios.get<DashboardResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/dashboard`, {
         withCredentials: true
       });
       
@@ -93,7 +93,7 @@ const Students = () => {
     if (!userToDelete) return;
     
     try {
-      const response = await axios.delete(`http://localhost:3000/api/v1/admin/delete-user/${userToDelete}`, {
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/delete-user/${userToDelete}`, {
         withCredentials: true
       });
       
@@ -142,46 +142,46 @@ const Students = () => {
   if (isLoading) {
     return (
       <div className="h-full min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-900"></div>
       </div>
     );
   }
 
   return (
-    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-gradient-to-br from-blue-200 to-blue-300">
+    <div className="h-full min-h-screen flex flex-col w-full overflow-hidden bg-white dark:bg-[#0e0e10]">
       <div className='hidden md:flex'>
         <Sidebar />
       </div>
       <main className="md:ml-64 p-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-gray-900">Students Management</h1>
-            <p className="text-gray-600">View and manage Students accounts</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-[#e2f1fc]">Students Management</h1>
+            <p className="text-neutral-500">View and manage Students accounts</p>
           </div>
         </div>
 
         <div>
           {error && (
-            <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-md">
+            <div className="mb-6 p-4 bg-red-100 dark:bg-[#18181a] text-red-700 rounded-md">
               {error}
             </div>
           )}
           
-          <div className="bg-sky-50 shadow rounded-lg overflow-hidden">
-            <div className="overflow-x-auto bg-sky-50">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+          <div className="dark:bg-[#18181a] shadow-lg rounded-lg overflow-hidden">
+            <div className="overflow-x-auto bg-sky-50 dark:bg-[#18181a]">
+              <table className="min-w-full divide-y divide-gray-500">
+                <thead className="bg-gray-200 dark:bg-[#18181a]">
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                       Name
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                       Email
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                       Role
                     </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 uppercase tracking-wider">
                       Created At
                     </th>
                     {(isAdmin || isSubAdmin) && (
@@ -191,14 +191,14 @@ const Students = () => {
                     )}
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-[#18181a] divide-y divide-gray-700">
                   {users.length > 0 ? (
                     users.map((user) => (
-                      <tr key={user.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <tr key={user.id} className="hover:bg-gray-200 dark:hover:bg-[#242427]">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-[#e2f1fc]">
                           {user.name}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-[#e2f1fc]">
                           {user.email}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -209,7 +209,7 @@ const Students = () => {
                             {user.role}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-[#e2f1fc]">
                           {formatDate(user.createdAt)}
                         </td>
                         {(isAdmin || isSubAdmin) && (
@@ -244,9 +244,9 @@ const Students = () => {
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Confirm Delete</h3>
-            <p className="text-sm text-gray-500 mb-6">
+          <div className="bg-white dark:bg-[#18181a] rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-medium text-black dark:text-white/90 mb-4">Confirm Delete</h3>
+            <p className="text-sm text-neutral-500 mb-6">
               Are you sure you want to delete {getUserNameById(userToDelete || '')}? This action cannot be undone.
             </p>
             <div className="flex justify-end space-x-3">

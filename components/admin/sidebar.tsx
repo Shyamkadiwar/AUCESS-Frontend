@@ -14,7 +14,7 @@ export function Sidebar() {
   const handleLogout = async () => {
     try {
       setIsLoggingOut(true);
-      const response = await axios.post('http://localhost:3000/api/v1/admin/logout', {}, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/admin/logout`, {}, {
         withCredentials: true
       });
       
@@ -31,47 +31,47 @@ export function Sidebar() {
     }
   };
   return (
-    <div className="w-64 bg-gray-700 h-full max-h-screen fixed left-0 top-0 text-white p-6">
+    <div className="w-64 dark:bg-[#18181a] h-full max-h-screen fixed left-0 top-0 text-white dark:border-0 border-[#bdbdbd] border-[1px] p-6">
       <div className="flex items-center gap-2 mb-8">
         <Image src={Logo} alt='Aucess' className='w-12 h-16'/>
-        <h1 className="text-2xl font-bold">AUCESS</h1>
+        <h1 className="text-2xl font-bold dark:text-white text-black">AUCESS</h1>
       </div>
       
       <nav className="space-y-2">
         <Link href={'/admin/dashboard'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Home className="w-5 h-5" />
-          Dashboard
+          <Home className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Dashboard</h1>
         </Link>
         <Link href={'/admin/create-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Plus className="w-5 h-5" />
-          Create Quiz
+          <Plus className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Create Quiz</h1>
         </Link>
         <Link href={'/admin/quizzes'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Trophy className="w-5 h-5" />
-          Ongoing Quizzes
+          <Trophy className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Ongoing Quizzes</h1>
         </Link>
         <Link href={'/admin/upcoming-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Timer className="w-5 h-5" />
-          Upcoming Quizzes
+          <Timer className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Upcoming Quizzes</h1>
         </Link>
         <Link href={'/admin/completed-quiz'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <TimerOff className="w-5 h-5" />
-          Completed Quizzes
+          <TimerOff className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Completed Quizzes</h1>
         </Link>
         <Link href={'/admin/students'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Users className="w-5 h-5" />
-          Students
+          <Users className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Students</h1>
         </Link>
         <Link href={'/admin/sub-admin'} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors">
-          <Users className="w-5 h-5" />
-          Manage Sub-admins 
+          <Users className="w-5 h-5 text-black dark:text-white/90" />
+          <h1 className='text-black dark:text-white/90'>Manage Sub-admins</h1> 
         </Link>
-        <button 
+        <button
           onClick={handleLogout}
           disabled={isLoggingOut}
-          className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-left"
+          className="w-full flex items-center text-black dark:text-white/90 gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors text-left"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="w-5 h-5 text-black dark:text-white/90" />
           {isLoggingOut ? 'Logging out...' : 'Logout'}
         </button>
       </nav>
